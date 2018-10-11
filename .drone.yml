@@ -8,7 +8,7 @@ pipeline:
     repo: rspamd/ci-ubuntu-gcc
     # Use current LTS release (Bionic Beaver)
     build_args:
-      - UBUNTU_VERSION="18.04"
+      - UBUNTU_VERSION=18.04
     tags:
       - latest
       - 18.04
