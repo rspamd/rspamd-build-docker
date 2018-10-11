@@ -4,6 +4,20 @@ pipeline:
 
   docker:
     image: plugins/docker
+    dockerfile: ubuntu-gcc/Dockerfile
+    repo: rspamd/ci-ubuntu-gcc
+    # Use current LTS release (Bionic Beaver)
+    build_args:
+      - UBUNTU_VERSION="18.04"
+    tags:
+      - latest
+      - 18.04
+    secrets: [ docker_username, docker_password ]
+    when:
+      event: [push, tag]
+
+  docker:
+    image: plugins/docker
     dockerfile: ubuntu-build/Dockerfile
     repo: rspamd/ci-ubuntu-build
     secrets: [ docker_username, docker_password ]
