@@ -1,0 +1,12 @@
+# Build Docker images using https://drone.io/ CI/CD and publish it to https://hub.docker.com/r/rspamd/
+---
+pipeline:
+
+  docker:
+    image: plugins/docker
+    dockerfile: ubuntu-build/Dockerfile
+    repo: rspamd/ci-ubuntu-build
+    secrets: [ docker_username, docker_password ]
+    tags: latest
+    when:
+      event: [push, tag]
