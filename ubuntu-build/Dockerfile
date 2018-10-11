@@ -9,7 +9,6 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN set -x; \
 	apt-get -q update && \
-	apt-get -qy upgrade && \
 	apt-get -qy --no-install-recommends install $build_deps && \
 	apt-get -q clean && \
 	rm -rf /var/cache/debconf /var/lib/apt/lists
