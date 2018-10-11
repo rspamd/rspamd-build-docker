@@ -2,7 +2,7 @@
 ---
 pipeline:
 
-  base:
+  base_image:
     image: plugins/docker
     dockerfile: ubuntu-gcc/Dockerfile
     repo: rspamd/ci-ubuntu-gcc
@@ -16,11 +16,20 @@ pipeline:
     when:
       event: [push, tag]
 
-  build:
+  build_image:
     image: plugins/docker
     dockerfile: ubuntu-build/Dockerfile
     repo: rspamd/ci-ubuntu-build
-    secrets: [ docker_username, docker_password ]
     tags: latest
+    secrets: [ docker_username, docker_password ]
+    when:
+      event: [push, tag]
+
+  test_image:
+    image: plugins/docker
+    dockerfile: ubuntu-test/Dockerfile
+    repo: rspamd/ci-ubuntu-test
+    tags: latest
+    secrets: [ docker_username, docker_password ]
     when:
       event: [push, tag]
