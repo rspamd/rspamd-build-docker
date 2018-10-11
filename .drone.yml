@@ -2,7 +2,7 @@
 ---
 pipeline:
 
-  docker:
+  base:
     image: plugins/docker
     dockerfile: ubuntu-gcc/Dockerfile
     repo: rspamd/ci-ubuntu-gcc
@@ -16,7 +16,7 @@ pipeline:
     when:
       event: [push, tag]
 
-  docker:
+  build:
     image: plugins/docker
     dockerfile: ubuntu-build/Dockerfile
     repo: rspamd/ci-ubuntu-build
