@@ -5,6 +5,7 @@ pipeline:
   base_image:
     image: plugins/docker
     dockerfile: ubuntu-gcc/Dockerfile
+    label_schema: [ docker.dockerfile="ubuntu-gcc/Dockerfile" ]
     repo: rspamd/ci-ubuntu-gcc
     # Use current LTS release (Bionic Beaver)
     build_args:
