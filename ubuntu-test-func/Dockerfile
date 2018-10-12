@@ -5,8 +5,6 @@ FROM rspamd/ci-ubuntu-test
 ARG test_deps="$coveralls_deps clickhouse-server redis-server opendkim-tools"
 ARG robot_test_deps="python2.7 python-pip python-setuptools python-demjson python-psutil python-requests"
 
-ENV DEBIAN_FRONTEND noninteractive
-
 RUN set -x; \
 	apt-get -qq update && \
 	apt-get -qy --no-install-recommends install wget ca-certificates gpg gpg-agent && \
