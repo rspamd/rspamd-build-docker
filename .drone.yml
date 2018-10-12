@@ -33,3 +33,12 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     when:
       event: [push, tag]
+
+  func_test_image:
+    image: plugins/docker
+    dockerfile: ubuntu-test-func/Dockerfile
+    repo: rspamd/ci-ubuntu-test
+    tags: latest
+    secrets: [ docker_username, docker_password ]
+    when:
+      event: [push, tag]
