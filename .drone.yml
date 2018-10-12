@@ -37,7 +37,7 @@ pipeline:
   func_test_image:
     image: plugins/docker
     dockerfile: ubuntu-test-func/Dockerfile
-    repo: rspamd/ci-ubuntu-test
+    repo: rspamd/ci-ubuntu-test-func
     tags: latest
     secrets: [ docker_username, docker_password ]
     when:
