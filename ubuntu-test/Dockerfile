@@ -1,4 +1,5 @@
-# Ubuntu with build dependencies for rspamd
+# Ubuntu with runtime dependencies for rspamd
+# and tools/dependencies to run test/rspamd-test
 
 # 1. gcc is required for installing luacov-coveralls from luarocks
 # 2. gcc provides gcov used by coveralls
