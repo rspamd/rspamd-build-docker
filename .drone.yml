@@ -5,7 +5,7 @@ pipeline:
   base_image:
     image: plugins/docker
     dockerfile: ubuntu-gcc/Dockerfile
-    label_schema: [ docker.dockerfile="ubuntu-gcc/Dockerfile" ]
+    label_schema: [ docker.dockerfile=ubuntu-gcc/Dockerfile ]
     repo: rspamd/ci-ubuntu-gcc
     # Use current LTS release (Bionic Beaver)
     build_args:
@@ -20,6 +20,7 @@ pipeline:
   build_image:
     image: plugins/docker
     dockerfile: ubuntu-build/Dockerfile
+    label_schema: [ docker.dockerfile=ubuntu-build/Dockerfile ]
     repo: rspamd/ci-ubuntu-build
     tags: latest
     secrets: [ docker_username, docker_password ]
@@ -29,6 +30,7 @@ pipeline:
   test_image:
     image: plugins/docker
     dockerfile: ubuntu-test/Dockerfile
+    label_schema: [ docker.dockerfile=ubuntu-test/Dockerfile ]
     repo: rspamd/ci-ubuntu-test
     tags: latest
     secrets: [ docker_username, docker_password ]
@@ -38,6 +40,7 @@ pipeline:
   func_test_image:
     image: plugins/docker
     dockerfile: ubuntu-test-func/Dockerfile
+    label_schema: [ docker.dockerfile=ubuntu-test-func/Dockerfile ]
     repo: rspamd/ci-ubuntu-test-func
     tags: latest
     secrets: [ docker_username, docker_password ]
