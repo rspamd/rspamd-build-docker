@@ -17,3 +17,5 @@ RUN set -x; \
 	pip3 install --no-binary :all: cpp-coveralls && \
 	apt-get -q clean && \
 	rm -rf /var/cache/debconf /var/lib/apt/lists
+
+USER nobody
