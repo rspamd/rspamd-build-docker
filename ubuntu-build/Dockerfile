@@ -10,3 +10,5 @@ RUN set -x; \
 	apt-get -qy --no-install-recommends install $build_deps && \
 	apt-get -q clean && \
 	rm -rf /var/cache/debconf /var/lib/apt/lists
+
+USER nobody
