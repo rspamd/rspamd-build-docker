@@ -19,6 +19,7 @@ pipeline:
 
   build_image:
     image: plugins/docker
+    # based on rspamd/ci-ubuntu-gcc
     dockerfile: ubuntu-build/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-build/Dockerfile ]
     repo: rspamd/ci-ubuntu-build
@@ -29,6 +30,7 @@ pipeline:
 
   test_image:
     image: plugins/docker
+    # based on rspamd/ci-ubuntu-gcc
     dockerfile: ubuntu-test/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-test/Dockerfile ]
     repo: rspamd/ci-ubuntu-test
@@ -39,6 +41,7 @@ pipeline:
 
   func_test_image:
     image: plugins/docker
+    # based on rspamd/ci-ubuntu-test
     dockerfile: ubuntu-test-func/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-test-func/Dockerfile ]
     repo: rspamd/ci-ubuntu-test-func
