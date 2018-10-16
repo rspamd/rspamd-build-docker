@@ -1,4 +1,6 @@
 # Build Docker images using https://drone.io/ CI/CD and publish it to https://hub.docker.com/r/rspamd/
+# Documentation http://plugins.drone.io/drone-plugins/drone-docker/ is not comprehensive
+# Refer to the source: https://github.com/drone-plugins/drone-docker
 ---
 pipeline:
 
