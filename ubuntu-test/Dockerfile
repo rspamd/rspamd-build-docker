@@ -5,9 +5,13 @@
 # 2. gcc provides gcov used by coveralls
 FROM rspamd/ci-ubuntu-gcc:18.04
 
+# rspamd runtime dependencies
 ARG run_deps="libunwind8 libluajit-5.1-2 libglib2.0-0 libevent-2.1 libicu60 libmagic1 libssl1.1 libsqlite3-0"
+# cpp-coveralls is not packaged and we have to install it using pip
+# but most it dependencies can be installed from packages
 ARG coveralls_deps="python3-pip python3-setuptools python3-urllib3 python3-requests python3-future python3-openssl python3-certifi"
-ARG test_deps="luarocks $coveralls_deps gdb"
+# other test dependencies
+ARG test_deps="luarocks gdb"
 
 # cpp-coveralls depends on git, but with our layout -  build root / object
 # files outside git repo directory it will not find git repo anyway.
@@ -15,7 +19,7 @@ ARG test_deps="luarocks $coveralls_deps gdb"
 
 RUN set -x; \
 	apt-get -q update && \
-	apt-get -qy --no-install-recommends install $run_deps $test_deps && \
+	apt-get -qy --no-install-recommends install $run_deps $coveralls_deps $test_deps && \
 	luarocks install luacov && \
 	luarocks install luacov-coveralls && \
 	pip3 install --no-binary :all: cpp-coveralls && \
