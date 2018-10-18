@@ -51,3 +51,14 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     when:
       event: [push, tag]
+
+  perl_tidyall_image:
+    image: plugins/docker
+    # based on apline:3.8
+    dockerfile: perl-tidyall/Dockerfile
+    label_schema: [ docker.dockerfile=perl-tidyall/Dockerfile ]
+    repo: rspamd/ci-perl-tidyall
+    tags: latest
+    secrets: [ docker_username, docker_password ]
+    when:
+      event: [push, tag]
