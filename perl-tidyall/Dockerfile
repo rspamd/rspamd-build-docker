@@ -6,7 +6,7 @@ FROM alpine:3.8
 # * perl-io-socket-ssl used by cpanm for https:// suport
 # * install XS dependencies from binary packages and all other using cpanm
 # * we don't verify perl modules signatures (most modules don't have them
-#   anyway) so at lest use https mirror: https://cpan.metacpan.org/
+#   anyway) so at least use https mirror: https://cpan.metacpan.org/
 
 RUN set -x; \
 	apk add --no-cache \
