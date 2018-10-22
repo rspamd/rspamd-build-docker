@@ -6,6 +6,8 @@ pipeline:
 
   base_image:
     image: plugins/docker
+    pull: true
+    storage_path: /drone/docker
     dockerfile: ubuntu-gcc/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-gcc/Dockerfile ]
     repo: rspamd/ci-ubuntu-gcc
@@ -21,6 +23,7 @@ pipeline:
 
   build_image:
     image: plugins/docker
+    storage_path: /drone/docker
     # based on rspamd/ci-ubuntu-gcc
     dockerfile: ubuntu-build/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-build/Dockerfile ]
@@ -32,6 +35,7 @@ pipeline:
 
   test_image:
     image: plugins/docker
+    storage_path: /drone/docker
     # based on rspamd/ci-ubuntu-gcc
     dockerfile: ubuntu-test/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-test/Dockerfile ]
@@ -43,6 +47,7 @@ pipeline:
 
   func_test_image:
     image: plugins/docker
+    storage_path: /drone/docker
     # based on rspamd/ci-ubuntu-test
     dockerfile: ubuntu-test-func/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-test-func/Dockerfile ]
@@ -54,6 +59,7 @@ pipeline:
 
   perl_tidyall_image:
     image: plugins/docker
+    storage_path: /drone/docker
     # based on apline:3.8
     dockerfile: perl-tidyall/Dockerfile
     label_schema: [ docker.dockerfile=perl-tidyall/Dockerfile ]
