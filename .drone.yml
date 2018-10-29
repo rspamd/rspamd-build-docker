@@ -47,3 +47,10 @@ pipeline:
     dockerfile: perl-tidyall/Dockerfile
     label_schema: [ docker.dockerfile=perl-tidyall/Dockerfile ]
     repo: rspamd/ci-perl-tidyall
+
+  fedora_build_image:
+    <<: *defaults
+    dockerfile: fedora-build/Dockerfile
+    label_schema: [ docker.dockerfile=fedora-build/Dockerfile ]
+    build_args: [ FEDORA_VERSION=29 ]
+    repo: rspamd/ci-fedora-build
