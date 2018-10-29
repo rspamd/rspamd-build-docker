@@ -7,3 +7,5 @@ RUN set -x; \
 	yum  -y --setopt install_weak_deps=False install clang lld cmake make pkgconf-pkg-config \
 		perl ragel file-devel glib2-devel libevent-devel libicu-devel luajit-devel openssl-devel sqlite-devel libnsl2-devel && \
 	rm /var/log/*.log && rm -r /var/cache/dnf
+
+USER nobody
