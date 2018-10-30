@@ -4,7 +4,7 @@
 
 This repo contains Dockerfiles for testing [rspamd](https://github.com/rspamd/rspamd) using [Drone](https://drone.io/).
 
-Images:
+## Images
 
 * [![Image size and layers](https://images.microbadger.com/badges/image/rspamd/ci-ubuntu-gcc.svg)](https://microbadger.com/images/rspamd/ci-ubuntu-gcc)              [![Commit](https://images.microbadger.com/badges/commit/rspamd/ci-ubuntu-build.svg)](https://microbadger.com/images/rspamd/ci-ubuntu-build)          [rspamd/ci-ubuntu-gcc](https://hub.docker.com/r/rspamd/ci-ubuntu-gcc/)
 * [![Image size and layers](https://images.microbadger.com/badges/image/rspamd/ci-ubuntu-build.svg)](https://microbadger.com/images/rspamd/ci-ubuntu-build)          [![Commit](https://images.microbadger.com/badges/commit/rspamd/ci-ubuntu-build.svg)](https://microbadger.com/images/rspamd/ci-ubuntu-build)          [rspamd/ci-ubuntu-build](https://hub.docker.com/r/rspamd/ci-ubuntu-build/)
