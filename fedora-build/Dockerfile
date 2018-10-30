@@ -5,7 +5,7 @@ FROM fedora:${FEDORA_VERSION}
 RUN set -x; \
 	yum -qy --setopt install_weak_deps=False upgrade-minimal && \
 	yum  -y --setopt install_weak_deps=False install clang lld cmake make pkgconf-pkg-config \
-		perl ragel file-devel glib2-devel libevent-devel libicu-devel luajit-devel openssl-devel sqlite-devel libnsl2-devel && \
+		perl ragel file-devel glib2-devel libevent-devel libicu-devel luajit-devel openssl-devel sqlite-devel && \
 	rm /var/log/*.log && rm -r /var/cache/dnf
 
 USER nobody
