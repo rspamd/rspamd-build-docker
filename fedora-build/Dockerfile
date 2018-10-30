@@ -2,7 +2,9 @@
 ARG  FEDORA_VERSION=29
 FROM fedora:${FEDORA_VERSION}
 
-# clang-devel and llvm-devel are used to build clang-plugin
+# clang-plugin build dependencies:
+#  * clang-devel
+#  * llvm-devel
 RUN set -x; \
 	yum -qy --setopt install_weak_deps=False upgrade-minimal && \
 	yum  -y --setopt install_weak_deps=False install clang lld cmake make pkgconf-pkg-config \
