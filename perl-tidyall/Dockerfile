@@ -12,7 +12,7 @@ RUN set -x; \
 	apk add --no-cache \
 		perl-app-cpanminus perl-io-socket-ssl make \
 		perl-clone perl-perlio-utf8_strict && \
-	cpanm --quiet --no-wget --notest --from https://cpan.metacpan.org/ \
+	cpanm --quiet --no-wget --notest --no-man-pages --from https://cpan.metacpan.org/ \
 		Code::TidyAll Code::TidyAll::Plugin::Test::Vars Perl::Critic Perl::Tidy Pod::Tidy && \
 	rm -r /root/.cpanm
 
