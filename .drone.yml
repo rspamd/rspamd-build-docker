@@ -9,6 +9,9 @@ x-defaults: &defaults
     when:
       event: [push, tag]
 
+x-versions:
+  fedora: &fedora_version FEDORA_VERSION=29
+
 pipeline:
   base_image:
     <<: *defaults
@@ -52,5 +55,5 @@ pipeline:
     <<: *defaults
     dockerfile: fedora-build/Dockerfile
     label_schema: [ docker.dockerfile=fedora-build/Dockerfile ]
-    build_args: [ FEDORA_VERSION=29 ]
+    build_args: [ *fedora_version ]
     repo: rspamd/ci-fedora-build
