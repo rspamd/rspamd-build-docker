@@ -6,6 +6,7 @@ x-defaults: &defaults
     image: plugins/docker
     storage_path: /drone/docker
     secrets: [ docker_username, docker_password ]
+    purge: false
     when:
       event: [push, tag]
 
