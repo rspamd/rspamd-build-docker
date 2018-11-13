@@ -15,11 +15,12 @@ FROM fedora:${FEDORA_VERSION}
 # tools;
 #   dnf-utils
 #   gdb
+#   llvm - for llvm-symbolizer
 
 RUN set -x; \
 	yum -qy --setopt install_weak_deps=False upgrade-minimal && \
 	yum  -y --setopt install_weak_deps=False install \
-		dnf-utils gdb \
+		dnf-utils gdb llvm \
 		file-libs glib2 libevent libicu luajit openssl-libs pcre sqlite-libs && \
 	yum -qy --setopt install_weak_deps=False debuginfo-install \
 		glibc glib2 && \
