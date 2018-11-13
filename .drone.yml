@@ -57,3 +57,10 @@ pipeline:
     label_schema: [ docker.dockerfile=fedora-build/Dockerfile ]
     build_args: [ *fedora_version ]
     repo: rspamd/ci-fedora-build
+
+  fedora_test_image:
+    <<: *defaults
+    dockerfile: fedora-test/Dockerfile
+    label_schema: [ docker.dockerfile=fedora-test/Dockerfile ]
+    build_args: [ *fedora_version ]
+    repo: rspamd/ci-fedora-test
