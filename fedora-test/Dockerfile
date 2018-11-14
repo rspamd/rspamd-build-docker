@@ -23,7 +23,7 @@ RUN set -x; \
 		dnf-utils gdb llvm \
 		file-libs glib2 libevent libicu luajit openssl-libs pcre sqlite-libs && \
 	yum -qy --setopt install_weak_deps=False debuginfo-install \
-		glibc glib2 && \
+		glibc glib2 luajit && \
 	yum -qy remove dnf-utils && \
 	rm /var/log/*.log && rm -r /var/cache/dnf
 
