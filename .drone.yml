@@ -11,6 +11,7 @@ x-defaults: &defaults
       event: [push, tag]
 
 x-versions:
+  alpine: &alpine_version ALPINE_VERSION=3.10.0
   fedora: &fedora_version FEDORA_VERSION=29
 
 pipeline:
@@ -47,9 +48,9 @@ pipeline:
 
   perl_tidyall_image:
     <<: *defaults
-    # based on apline:3.8
     dockerfile: perl-tidyall/Dockerfile
     label_schema: [ docker.dockerfile=perl-tidyall/Dockerfile ]
+    build_args: [ *alpine_version ]
     repo: rspamd/ci-perl-tidyall
 
   fedora_build_image:

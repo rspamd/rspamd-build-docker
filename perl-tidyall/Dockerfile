@@ -1,7 +1,8 @@
 # Docker image for running tidyall:
 # https://metacpan.org/release/Code-TidyAll
 
-FROM alpine:3.8
+ARG  ALPINE_VERSION=latest
+FROM alpine:${ALPINE_VERSION}
 
 # * perl-io-socket-ssl used by cpanm for https:// suport
 # * install XS dependencies from binary packages and all other using cpanm
