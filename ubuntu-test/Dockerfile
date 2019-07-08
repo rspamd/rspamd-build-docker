@@ -6,7 +6,7 @@
 FROM rspamd/ci-ubuntu-gcc:18.04
 
 # rspamd runtime dependencies (and also debug symbols to get more useful backtraces)
-ARG run_deps="libevent-2.1 libglib2.0-0 libglib2.0-0-dbgsym libicu60 libluajit-5.1-2 libmagic1 libsqlite3-0 libssl1.1 libunwind8"
+ARG run_deps="libevent-2.1 libglib2.0-0 libglib2.0-0-dbgsym libicu60 libluajit-5.1-2 libmagic1 libsqlite3-0 libssl1.1 libunwind8 libsodium23"
 # test dependencies:
 # * luarocks used to install luacov and luacov-coveralls
 # * python3-requests used by merge_coveralls.py
