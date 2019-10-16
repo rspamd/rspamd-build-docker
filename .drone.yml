@@ -11,7 +11,7 @@ x-defaults: &defaults
       event: [push, tag]
 
 x-versions:
-  alpine: &alpine_version ALPINE_VERSION=3.10.0
+  alpine: &alpine_version ALPINE_VERSION=3.10.2
   fedora: &fedora_version FEDORA_VERSION=29
 
 pipeline:
