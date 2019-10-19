@@ -1,68 +1,95 @@
+---
 # Build Docker images using https://drone.io/ CI/CD and publish it to https://hub.docker.com/r/rspamd/
 # Documentation http://plugins.drone.io/drone-plugins/drone-docker/ is not comprehensive
 # Refer to the source: https://github.com/drone-plugins/drone-docker
----
-x-defaults: &defaults
-    image: plugins/docker
-    storage_path: /drone/docker
-    secrets: [ docker_username, docker_password ]
-    purge: false
-    when:
-      event: [push, tag]
+kind: pipeline
+type: docker
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+x-default-settings: &default_settings
+  username: { from_secret: docker_username }
+  password: { from_secret: docker_password }
+  storage_path: /drone/docker
 
 x-versions:
   alpine: &alpine_version ALPINE_VERSION=3.10.2
   fedora: &fedora_version FEDORA_VERSION=29
 
-pipeline:
-  base_image:
-    <<: *defaults
-    pull: true
+steps:
+- name: base_image
+  image: plugins/docker
+  settings:
+    <<: *default_settings
     dockerfile: ubuntu-gcc/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-gcc/Dockerfile ]
-    repo: rspamd/ci-ubuntu-gcc
-    # Use current LTS release (Bionic Beaver)
     build_args: [ UBUNTU_VERSION=18.04 ]
+    repo: rspamd/ci-ubuntu-gcc
     tags: [ latest, "18.04" ]
 
-  build_image:
-    <<: *defaults
-    # based on rspamd/ci-ubuntu-gcc
+- name: build_image
+  image: plugins/docker
+  settings:
+    <<: *default_settings
     dockerfile: ubuntu-build/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-build/Dockerfile ]
     repo: rspamd/ci-ubuntu-build
+  depends_on: [ base_image ]
 
-  test_image:
-    <<: *defaults
-    # based on rspamd/ci-ubuntu-gcc
+- name: test_image
+  image: plugins/docker
+  settings:
+    <<: *default_settings
     dockerfile: ubuntu-test/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-test/Dockerfile ]
     repo: rspamd/ci-ubuntu-test
+  depends_on: [ base_image ]
 
-  func_test_image:
-    <<: *defaults
-    # based on rspamd/ci-ubuntu-test
+- name: func_test_image
+  image: plugins/docker
+  settings:
+    <<: *default_settings
     dockerfile: ubuntu-test-func/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-test-func/Dockerfile ]
     repo: rspamd/ci-ubuntu-test-func
+  depends_on: [ test_image ]
 
-  perl_tidyall_image:
-    <<: *defaults
+- name: perl_tidyall_image
+  image: plugins/docker
+  settings:
+    <<: *default_settings
     dockerfile: perl-tidyall/Dockerfile
     label_schema: [ docker.dockerfile=perl-tidyall/Dockerfile ]
     build_args: [ *alpine_version ]
     repo: rspamd/ci-perl-tidyall
 
-  fedora_build_image:
-    <<: *defaults
+- name: fedora_build_image
+  image: plugins/docker
+  settings:
+    <<: *default_settings
     dockerfile: fedora-build/Dockerfile
     label_schema: [ docker.dockerfile=fedora-build/Dockerfile ]
     build_args: [ *fedora_version ]
     repo: rspamd/ci-fedora-build
 
-  fedora_test_image:
-    <<: *defaults
+- name: fedora_test_image
+  image: plugins/docker
+  settings:
+    <<: *default_settings
     dockerfile: fedora-test/Dockerfile
     label_schema: [ docker.dockerfile=fedora-test/Dockerfile ]
     build_args: [ *fedora_version ]
     repo: rspamd/ci-fedora-test
+  depends_on: [ fedora_build_image ]
+
+trigger:
+  branch: [ master ]
+  event: [push, tag]
+---
+kind: signature
+hmac: aba99982dcde7479bebcf8d78845fab517de7ecab89e3d7659bbfec82df29c2d
+
+...
