@@ -17,7 +17,7 @@ x-default-settings: &default_settings
 
 x-versions:
   alpine: &alpine_version ALPINE_VERSION=3.10.2
-  fedora: &fedora_version FEDORA_VERSION=29
+  fedora: &fedora_version FEDORA_VERSION=31
 
 steps:
 - name: base_image
@@ -90,6 +90,6 @@ trigger:
   event: [push, tag]
 ---
 kind: signature
-hmac: aba99982dcde7479bebcf8d78845fab517de7ecab89e3d7659bbfec82df29c2d
+hmac: 287c219b3343d4750235a81c2d83c65c0d5703239a5e6e62be3d18adf89f454b
 
 ...
