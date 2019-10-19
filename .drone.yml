@@ -14,6 +14,7 @@ x-default-settings: &default_settings
   username: { from_secret: docker_username }
   password: { from_secret: docker_password }
   storage_path: /drone/docker
+  purge: false
 
 x-versions:
   alpine: &alpine_version ALPINE_VERSION=3.10.2
@@ -22,6 +23,9 @@ x-versions:
 steps:
 - name: base_image
   image: plugins/docker
+  volumes:
+  - name: ubuntu
+    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: ubuntu-gcc/Dockerfile
@@ -32,6 +36,9 @@ steps:
 
 - name: build_image
   image: plugins/docker
+  volumes:
+  - name: ubuntu
+    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: ubuntu-build/Dockerfile
@@ -41,15 +48,21 @@ steps:
 
 - name: test_image
   image: plugins/docker
+  volumes:
+  - name: ubuntu
+    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: ubuntu-test/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-test/Dockerfile ]
     repo: rspamd/ci-ubuntu-test
-  depends_on: [ base_image ]
+  depends_on: [ build_image ]
 
 - name: func_test_image
   image: plugins/docker
+  volumes:
+  - name: ubuntu
+    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: ubuntu-test-func/Dockerfile
@@ -68,6 +81,9 @@ steps:
 
 - name: fedora_build_image
   image: plugins/docker
+  volumes:
+  - name: fedora
+    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: fedora-build/Dockerfile
@@ -77,6 +93,9 @@ steps:
 
 - name: fedora_test_image
   image: plugins/docker
+  volumes:
+  - name: fedora
+    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: fedora-test/Dockerfile
@@ -85,11 +104,17 @@ steps:
     repo: rspamd/ci-fedora-test
   depends_on: [ fedora_build_image ]
 
+volumes:
+- name: fedora
+  temp: {}
+- name: ubuntu
+  temp: {}
+
 trigger:
   branch: [ master ]
   event: [push, tag]
 ---
 kind: signature
-hmac: 287c219b3343d4750235a81c2d83c65c0d5703239a5e6e62be3d18adf89f454b
+hmac: 2c795bb964d287585caa5b6d0d55251db682080b9a679e9009fb8f00aa0e7132
 
 ...
