@@ -1,6 +1,6 @@
 # Ubuntu with gcc
 # Base layer for other iamges
-ARG  UBUNTU_VERSION=18.04
+ARG  UBUNTU_VERSION=20.04
 FROM ubuntu:${UBUNTU_VERSION}
 
 ENV DEBIAN_FRONTEND noninteractive

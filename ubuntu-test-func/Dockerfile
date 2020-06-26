@@ -3,7 +3,7 @@
 FROM rspamd/ci-ubuntu-test
 
 ARG test_deps="$coveralls_deps clickhouse-server redis-server opendkim-tools"
-ARG robot_test_deps="python2.7 python-pip python-setuptools python-demjson python-psutil python-requests"
+ARG robot_test_deps="python3 python3-pip python3-setuptools python3-demjson python3-psutil python3-requests"
 
 USER root
 
@@ -16,7 +16,7 @@ RUN set -x; \
 	echo "deb http://repo.yandex.ru/clickhouse/deb/stable/ main/" > /etc/apt/sources.list.d/clickhouse.list && \
 	apt-get -q update && \
 	apt-get -qy --no-install-recommends install $test_deps $robot_test_deps && \
-	pip install --no-cache --disable-pip-version-check --no-binary :all: robotframework && \
+	pip3 install --no-cache --disable-pip-version-check --no-binary :all: robotframework && \
 	luarocks install luacheck && \
 	apt-get -qy remove gpg gpg-agent && \
 	apt-get -qy autoremove && \
