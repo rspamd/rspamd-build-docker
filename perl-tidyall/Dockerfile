@@ -11,7 +11,7 @@ FROM alpine:${ALPINE_VERSION}
 
 RUN set -x; \
 	apk add --no-cache \
-		perl-app-cpanminus perl-io-socket-ssl make \
+		perl-app-cpanminus perl-io-socket-ssl make gcc musl-dev perl-dev \
 		perl-clone perl-perlio-utf8_strict && \
 	cpanm --quiet --no-wget --notest --no-man-pages --from https://cpan.metacpan.org/ \
 		Code::TidyAll Code::TidyAll::Plugin::Test::Vars Perl::Critic Perl::Tidy Pod::Tidy && \
