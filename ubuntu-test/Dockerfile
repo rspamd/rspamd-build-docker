@@ -19,7 +19,7 @@ RUN set -x; \
 	printf "deb http://ddebs.ubuntu.com ${VERSION_CODENAME} main\ndeb http://ddebs.ubuntu.com ${VERSION_CODENAME}-updates main\n" > /etc/apt/sources.list.d/ddebs.list && \
 	apt-get -q update && \
 	apt-get -qy --no-install-recommends install $run_deps $test_deps && \
-	luarocks install luacov && \
+	luarocks install cluacov && \
 	luarocks install luacov-coveralls && \
 	apt-get -q clean && \
 	rm -rf /var/cache/debconf /var/lib/apt/lists
