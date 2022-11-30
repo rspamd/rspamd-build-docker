@@ -17,8 +17,8 @@ x-default-settings: &default_settings
   purge: false
 
 x-versions:
-  alpine: &alpine_version ALPINE_VERSION=3.13.0
-  fedora: &fedora_version FEDORA_VERSION=34
+  alpine: &alpine_version ALPINE_VERSION=3.17.0
+  fedora: &fedora_version FEDORA_VERSION=37
 
 steps:
 - name: base_image
