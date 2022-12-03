@@ -30,9 +30,9 @@ steps:
     <<: *default_settings
     dockerfile: ubuntu-gcc/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-gcc/Dockerfile ]
-    build_args: [ UBUNTU_VERSION=20.04 ]
+    build_args: [ UBUNTU_VERSION=22.04 ]
     repo: rspamd/ci-ubuntu-gcc
-    tags: [ latest, "20.04" ]
+    tags: [ latest, "22.04" ]
 
 - name: build_image
   image: plugins/docker
