@@ -16,7 +16,7 @@ RUN set -x; \
 	echo "deb http://repo.yandex.ru/clickhouse/deb/stable/ main/" > /etc/apt/sources.list.d/clickhouse.list && \
 	apt-get -q update && \
 	apt-get -qy --no-install-recommends install $test_deps $robot_test_deps && \
-	pip3 install --no-cache --disable-pip-version-check --no-binary :all: robotframework && \
+	pip3 install --no-cache --disable-pip-version-check --no-binary :all: robotframework tornado && \
 	luarocks install luacheck && \
 	apt-get -qy remove gpg gpg-agent && \
 	apt-get -qy autoremove && \
