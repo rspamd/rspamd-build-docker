@@ -10,7 +10,7 @@ RUN set -x; \
   dnf -qy --setopt install_weak_deps=False upgrade-minimal && \
   dnf  -y --setopt install_weak_deps=False install clang compiler-rt gcc gcc-c++ lld cmake make pkgconf-pkg-config \
   	perl ragel file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel \
-  	clang-devel llvm-devel libsodium-devel git rpm-build && \
+  	clang-devel llvm-devel libsodium-devel git rpm-build openblas-devel && \
   rpmArch="$(rpm --eval '%{_arch}')" && \
   case "$rpmArch" in \
     arm64) \
@@ -20,7 +20,7 @@ RUN set -x; \
        (source /opt/rh/gcc-toolset-11/enable ; cd /vectorscan-src ; mkdir build ; cd build ; cmake .. -DCMAKE_INSTALL_PREFIX=/vectorscan -DCMAKE_BUILD_TYPE=Release -DFAT_RUNTIME=ON -DCMAKE_C_FLAGS="-fpic -fPIC" -DCMAKE_CXX_FLAGS="-fPIC -fpic" -DPCRE_SUPPORT_LIBBZ2=OFF; make -j4 ; make install) ; \
       ;; \
     *) \
-       dnf -qy install hyperscan-devel  \
+       dnf -qy install hyperscan-devel jemalloc-devel  \
       ;; \
   esac && \
   rm /var/log/*.log && rm -r /var/cache/dnf 
