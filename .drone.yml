@@ -104,10 +104,36 @@ steps:
     repo: rspamd/ci-fedora-test
   depends_on: [ fedora_build_image ]
 
+- name: centos8_pkg_image
+  image: plugins/docker
+  volumes:
+  - name: centos8
+    path: /drone/docker
+  settings:
+    <<: *default_settings
+    dockerfile: centos-8/Dockerfile
+    label_schema: [ docker.dockerfile=centos-8/Dockerfile ]
+    repo: rspamd/centos-8
+
+- name: centos7_pkg_image
+  image: plugins/docker
+  volumes:
+  - name: centos7
+    path: /drone/docker
+  settings:
+    <<: *default_settings
+    dockerfile: centos-7/Dockerfile
+    label_schema: [ docker.dockerfile=centos-7/Dockerfile ]
+    repo: rspamd/centos-7
+
 volumes:
 - name: fedora
   temp: {}
 - name: ubuntu
+  temp: {}
+- name: centos7
+  temp: {}
+- name: centos8
   temp: {}
 
 trigger:
@@ -115,6 +141,6 @@ trigger:
   event: [push, tag]
 ---
 kind: signature
-hmac: f624904c98bbf98e4e6bc805c7e713536cf6a1fc417b938a121c12108c0f72b3
+hmac: ccfb975bd72102a04bea5fa63c9f4aec9d0be8177cb63c30e1c09ea5e8aca8c7
 
 ...
