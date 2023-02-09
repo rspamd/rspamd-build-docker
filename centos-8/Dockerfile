@@ -10,7 +10,7 @@ RUN set -x; \
   dnf -qy --setopt install_weak_deps=False upgrade-minimal && \
   dnf  -y --setopt install_weak_deps=False install clang compiler-rt gcc gcc-c++ lld cmake make pkgconf-pkg-config \
   	perl ragel file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel \
-  	clang-devel llvm-devel libsodium-devel git rpm-build openblas-devel libunwind-devel lapack lapack-devel blas-devel blas pcre2-devel sudo gcc-toolset-10-gcc-c++ binutils systemd gcc-toolset-10-annobin gcc-toolset-10-binutils-devel && \
+  	clang-devel llvm-devel libsodium-devel git rpm-build openblas-devel libunwind-devel lapack lapack-devel blas-devel blas pcre2-devel sudo gcc-toolset-10-gcc-c++ binutils systemd gcc-toolset-10-annobin gcc-toolset-10-binutils-devel gcc-toolset-10-libasan-devel && \
   rpmArch="$(rpm --eval '%{_arch}')" && \
   ln -sf /opt/rh/gcc-toolset-10/root/usr/lib/gcc/${rpmArch}-redhat-linux/10/plugin/annobin.so /opt/rh/gcc-toolset-10/root/usr/lib/gcc/${rpmArch}-redhat-linux/10/plugin/gcc-annobin.so && \
   case "$rpmArch" in \
