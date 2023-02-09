@@ -113,7 +113,8 @@ steps:
     <<: *default_settings
     dockerfile: centos-8/Dockerfile
     label_schema: [ docker.dockerfile=centos-8/Dockerfile ]
-    repo: rspamd/centos-8
+    repo: rspamd/pkg
+    tags: [ "centos-8" ]
 
 - name: centos7_pkg_image
   image: plugins/docker
@@ -124,7 +125,8 @@ steps:
     <<: *default_settings
     dockerfile: centos-7/Dockerfile
     label_schema: [ docker.dockerfile=centos-7/Dockerfile ]
-    repo: rspamd/centos-7
+    repo: rspamd/pkg
+    tags: [ "centos-7" ]
 
 volumes:
 - name: fedora
@@ -141,6 +143,6 @@ trigger:
   event: [push, tag]
 ---
 kind: signature
-hmac: ccfb975bd72102a04bea5fa63c9f4aec9d0be8177cb63c30e1c09ea5e8aca8c7
+hmac: 0e55a1d5b76f7bf502bbba85a672007b9e57d34017b5804f5e1a55baf6ca4b94
 
 ...
