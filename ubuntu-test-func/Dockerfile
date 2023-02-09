@@ -10,10 +10,9 @@ USER root
 RUN set -x; \
 	apt-get -qq update && \
 	apt-get -qy --no-install-recommends install wget ca-certificates gpg gpg-agent && \
-	wget https://repo.yandex.ru/clickhouse/CLICKHOUSE-KEY.GPG && \
-	apt-key add --batch CLICKHOUSE-KEY.GPG && \
-	rm CLICKHOUSE-KEY.GPG && \
-	echo "deb http://repo.yandex.ru/clickhouse/deb/stable/ main/" > /etc/apt/sources.list.d/clickhouse.list && \
+  apt-get -qy --no-install-recommends install apt-transport-https ca-certificates dirmngr && \
+  apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 8919F6BD2B48D754 && \
+  echo "deb https://packages.clickhouse.com/deb stable main" | tee /etc/apt/sources.list.d/clickhouse.list && \
 	apt-get -q update && \
 	apt-get -qy --no-install-recommends install $test_deps $robot_test_deps && \
 	pip3 install --no-cache --disable-pip-version-check --no-binary :all: robotframework tornado && \
