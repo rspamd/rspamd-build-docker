@@ -4,7 +4,7 @@
 # Refer to the source: https://github.com/drone-plugins/drone-docker
 kind: pipeline
 type: docker
-name: default
+name: default-amd64
 
 platform:
   os: linux
@@ -144,7 +144,7 @@ trigger:
 ---
 kind: pipeline
 type: docker
-name: default
+name: default-arm64
 
 platform:
   os: linux
