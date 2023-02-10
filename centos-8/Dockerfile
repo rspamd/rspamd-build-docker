@@ -14,7 +14,7 @@ RUN set -x; \
   rpmArch="$(rpm --eval '%{_arch}')" && \
   ln -sf /opt/rh/gcc-toolset-10/root/usr/lib/gcc/${rpmArch}-redhat-linux/10/plugin/annobin.so /opt/rh/gcc-toolset-10/root/usr/lib/gcc/${rpmArch}-redhat-linux/10/plugin/gcc-annobin.so && \
   case "$rpmArch" in \
-    arm64) \
+    aarch64) \
        rm -fr /vectorscan-src/ ; \
        dnf -qy install python3-devel boost-devel git && \
        git clone https://github.com/VectorCamp/vectorscan --depth 1 --branch vectorscan/5.4.8 /vectorscan-src && \
