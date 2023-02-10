@@ -3,6 +3,9 @@ FROM oraclelinux:7-slim
 # clang-plugin build dependencies:
 #  * clang-devel
 #  * llvm-devel
+# Additional things:
+# Ragel is broken, need to build ragel 6.10 from the sources
+# Boost is too old, need a better boost, lol
 RUN set -x; \
   printf "[ol7_software_collections]\nname=Software Collection Library release 3.0 packages for Oracle Linux 7 (\$basearch)\nbaseurl=https://yum.oracle.com/repo/OracleLinux/OL7/SoftwareCollections/\$basearch/\ngpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle\ngpgcheck=1\nenabled=1\n" > /etc/yum.repos.d/sc.repo && \
   printf "[ol7_epel]\nname=Oracle Linux \$releasever EPEL (\$basearch)\nbaseurl=https://yum.oracle.com/repo/OracleLinux/OL7/developer_EPEL/\$basearch/\ngpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle\ngpgcheck=1\nenabled=1\n" > /etc/yum.repos.d/epel.repo && \
@@ -12,6 +15,8 @@ RUN set -x; \
   	perl ragel file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel \
   	clang-devel llvm-devel libsodium-devel git rpm-build openblas-devel libunwind-devel lapack lapack-devel blas-devel blas pcre2-devel devtoolset-10-llvm-devel devtoolset-10-clang-devel devtoolset-10-libasan-devel sudo && \
   yum -qy install devtoolset-10-gcc-c++  python3-devel boost-devel git cmake3 wget && \
+  wget https://www.colm.net/files/ragel/ragel-6.10.tar.gz && rm -fr ragel-6.10 && \
+  tar xvf ragel-6.10.tar.gz && (cd ragel-6.10 && ./configure --prefix=/usr && make -j4 && make install) && \
   wget https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.gz -O /boost.tar.gz && \
   tar -xf /boost.tar.gz && \
   rm -fr /vectorscan-src/ ; \
