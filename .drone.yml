@@ -128,6 +128,40 @@ steps:
     repo: rspamd/pkg
     tags: [ "centos-7" ]
 
+- name: ubuntu_jammy_pkg_image
+  image: plugins/docker
+  volumes:
+  - name: ubuntu-jammy
+    path: /drone/docker
+  settings:
+    <<: *default_settings
+    dockerfile: ubuntu-jammy/Dockerfile
+    label_schema: [ docker.dockerfile=ubuntu-jammy/Dockerfile ]
+    repo: rspamd/pkg
+    tags: [ "ubuntu-jammy" ]
+- name: ubuntu_focal_pkg_image
+  image: plugins/docker
+  volumes:
+  - name: ubuntu-focal
+    path: /drone/docker
+  settings:
+    <<: *default_settings
+    dockerfile: ubuntu-focal/Dockerfile
+    label_schema: [ docker.dockerfile=ubuntu-focal/Dockerfile ]
+    repo: rspamd/pkg
+    tags: [ "ubuntu-focal" ]
+- name: ubuntu_bionic_pkg_image
+  image: plugins/docker
+  volumes:
+  - name: ubuntu-bionic
+    path: /drone/docker
+  settings:
+    <<: *default_settings
+    dockerfile: ubuntu-bionic/Dockerfile
+    label_schema: [ docker.dockerfile=ubuntu-bionic/Dockerfile ]
+    repo: rspamd/pkg
+    tags: [ "ubuntu-bionic" ]
+
 volumes:
 - name: fedora
   temp: {}
@@ -137,12 +171,18 @@ volumes:
   temp: {}
 - name: centos8
   temp: {}
+- name: ubuntu-jammy
+  temp: {}
+- name: ubuntu-focal
+  temp: {}
+- name: ubuntu-bionic
+  temp: {}
 
 trigger:
   branch: [ master ]
   event: [push, tag, custom]
 ---
 kind: signature
-hmac: b507bd736d7fc4d43fc5ab4a4f013e61599950f6e48c6f6c9d925d3fd6f36faf
+hmac: 5865031b4b6a40e230dcc54da392a873a13abea22bc6ad5a9555bc061eb52c8f
 
 ...
