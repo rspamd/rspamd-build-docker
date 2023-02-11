@@ -161,6 +161,28 @@ steps:
     label_schema: [ docker.dockerfile=ubuntu-bionic/Dockerfile ]
     repo: rspamd/pkg
     tags: [ "ubuntu-bionic" ]
+- name: debian_bullseye_pkg_image
+  image: plugins/docker
+  volumes:
+  - name: debian-bullseye
+    path: /drone/docker
+  settings:
+    <<: *default_settings
+    dockerfile: debian-bullseye/Dockerfile
+    label_schema: [ docker.dockerfile=debian-bullseye/Dockerfile ]
+    repo: rspamd/pkg
+    tags: [ "debian-bullseye" ]
+- name: debian_buster_pkg_image
+  image: plugins/docker
+  volumes:
+  - name: debian-buster
+    path: /drone/docker
+  settings:
+    <<: *default_settings
+    dockerfile: debian-buster/Dockerfile
+    label_schema: [ docker.dockerfile=debian-buster/Dockerfile ]
+    repo: rspamd/pkg
+    tags: [ "debian-buster" ]
 
 volumes:
 - name: fedora
@@ -177,12 +199,16 @@ volumes:
   temp: {}
 - name: ubuntu-bionic
   temp: {}
+- name: debian-bullseye
+  temp: {}
+- name: debian-buster
+  temp: {}
 
 trigger:
   branch: [ master ]
   event: [push, tag, custom]
 ---
 kind: signature
-hmac: 5865031b4b6a40e230dcc54da392a873a13abea22bc6ad5a9555bc061eb52c8f
+hmac: 2484971169c3a3ae66b3dc180f0680f1e5ebf36f6978daf610e52d227c64b4f0
 
 ...
