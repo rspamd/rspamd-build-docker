@@ -32,7 +32,7 @@ RUN set -x; \
 			;; \
 		arm64) \
 			rm -fr /vectorscan-src/ /vectorscan ; \
-		        dnf -qy install python3-devel boost-devel git && \
+            apt-get -qy install python3-dev libboost-dev && \
 		        git clone https://github.com/VectorCamp/vectorscan --depth 1 --branch vectorscan/5.4.8 /vectorscan-src && \
 		        (cd /vectorscan-src ; mkdir build ; cd build ; cmake .. -DCMAKE_C_COMPILER="$c_compiler" -DCMAKE_CXX_COMPILER="$cxx_compiler" -DCMAKE_INSTALL_PREFIX=/vectorscan -DCMAKE_BUILD_TYPE=Release -DFAT_RUNTIME=ON -DCMAKE_C_FLAGS="-fpic -fPIC" -DCMAKE_CXX_FLAGS="-fPIC -fpic" -DPCRE_SUPPORT_LIBBZ2=OFF; make -j4 ; make install) ; \
 		        rm -fr /vectorscan-src/ ; \
