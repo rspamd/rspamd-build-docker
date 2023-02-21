@@ -1,7 +1,7 @@
 # Ubuntu with build dependencies for rspamd
 
 # LTS (Jammy Jellyfish)
-FROM rspamd/ci-ubuntu-gcc:22.04
+FROM rspamd/ci:ubuntu-gcc
 
 ARG build_deps="cmake make pkg-config ragel libc6-dev libevent-dev libglib2.0-dev libicu-dev libluajit-5.1-dev libmagic-dev libsqlite3-dev libssl-dev libunwind-dev libsodium-dev ninja-build"
 

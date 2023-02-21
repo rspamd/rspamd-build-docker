@@ -1,6 +1,6 @@
 # Ubuntu with all dependencies for running rspamd functional tests
 
-FROM rspamd/ci-ubuntu-test
+FROM rspamd/ci:ubuntu-test
 
 ARG test_deps="$coveralls_deps clickhouse-server redis-server opendkim-tools miltertest"
 ARG robot_test_deps="python3 python3-pip python3-setuptools python3-demjson python3-psutil python3-requests"

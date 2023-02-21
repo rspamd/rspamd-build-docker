@@ -3,7 +3,7 @@
 
 # 1. gcc is required for installing luacov-coveralls from luarocks
 # 2. gcc provides gcov used by gcov_coveralls.py
-FROM rspamd/ci-ubuntu-gcc:22.04
+FROM rspamd/ci:ubuntu-gcc
 
 # rspamd runtime dependencies (and also debug symbols to get more useful backtraces)
 ARG run_deps="libevent-2.1 libglib2.0-0 libglib2.0-dev libicu70 libluajit-5.1-2 libmagic1 libsqlite3-0 libssl3 libunwind8 libsodium23"

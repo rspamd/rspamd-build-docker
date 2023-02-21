@@ -31,8 +31,8 @@ steps:
     dockerfile: ubuntu-gcc/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-gcc/Dockerfile ]
     build_args: [ UBUNTU_VERSION=22.04 ]
-    repo: rspamd/ci-ubuntu-gcc
-    tags: [ latest, "22.04" ]
+    repo: rspamd/ci
+    tags: [ "ubuntu-gcc" ]
 
 - name: build_image
   image: plugins/docker
@@ -43,7 +43,8 @@ steps:
     <<: *default_settings
     dockerfile: ubuntu-build/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-build/Dockerfile ]
-    repo: rspamd/ci-ubuntu-build
+    repo: rspamd/ci
+    tags: [ "ubuntu-build" ]
   depends_on: [ base_image ]
 
 - name: test_image
@@ -55,7 +56,8 @@ steps:
     <<: *default_settings
     dockerfile: ubuntu-test/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-test/Dockerfile ]
-    repo: rspamd/ci-ubuntu-test
+    repo: rspamd/ci
+    tags: [ "ubuntu-test" ]
   depends_on: [ build_image ]
 
 - name: func_test_image
@@ -67,7 +69,8 @@ steps:
     <<: *default_settings
     dockerfile: ubuntu-test-func/Dockerfile
     label_schema: [ docker.dockerfile=ubuntu-test-func/Dockerfile ]
-    repo: rspamd/ci-ubuntu-test-func
+    repo: rspamd/ci
+    tags: [ "ubuntu-test-func" ]
   depends_on: [ test_image ]
 
 - name: perl_tidyall_image
@@ -77,7 +80,8 @@ steps:
     dockerfile: perl-tidyall/Dockerfile
     label_schema: [ docker.dockerfile=perl-tidyall/Dockerfile ]
     build_args: [ *alpine_version ]
-    repo: rspamd/ci-perl-tidyall
+    repo: rspamd/ci
+    tags: [ "perl-tidyall" ]
 
 - name: fedora_build_image
   image: plugins/docker
@@ -89,7 +93,8 @@ steps:
     dockerfile: fedora-build/Dockerfile
     label_schema: [ docker.dockerfile=fedora-build/Dockerfile ]
     build_args: [ *fedora_version ]
-    repo: rspamd/ci-fedora-build
+    repo: rspamd/ci
+    tags: [ "fedora-build" ]
 
 - name: fedora_test_image
   image: plugins/docker
@@ -101,7 +106,8 @@ steps:
     dockerfile: fedora-test/Dockerfile
     label_schema: [ docker.dockerfile=fedora-test/Dockerfile ]
     build_args: [ *fedora_version ]
-    repo: rspamd/ci-fedora-test
+    repo: rspamd/ci
+    tags: [ "fedora-test" ]
   depends_on: [ fedora_build_image ]
 
 - name: centos8_pkg_image
@@ -209,6 +215,6 @@ trigger:
   event: [push, tag, custom]
 ---
 kind: signature
-hmac: 2484971169c3a3ae66b3dc180f0680f1e5ebf36f6978daf610e52d227c64b4f0
+hmac: ca03bf5a2c25fad4e67d58931b3f044db681e266779ac680210b24b9f814ebb0
 
 ...
