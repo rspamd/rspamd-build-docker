@@ -13,7 +13,7 @@ RUN set -x; \
   yum -qy --setopt install_weak_deps=False upgrade-minimal && \
   yum  -y --setopt install_weak_deps=False install clang compiler-rt gcc gcc-c++ cmake3 make pkgconf-pkg-config \
   	perl ragel file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel \
-  	clang-devel llvm-devel libsodium-devel git rpm-build openblas-devel libunwind-devel lapack lapack-devel blas-devel blas pcre2-devel devtoolset-10-llvm-devel devtoolset-10-clang-devel devtoolset-10-libasan-devel sudo && \
+  	clang-devel llvm-devel libsodium-devel git rpm-build openblas-devel libunwind-devel lapack lapack-devel blas-devel blas pcre2-devel devtoolset-10-llvm-devel devtoolset-10-clang-devel devtoolset-10-libasan-devel sudo patch && \
   yum -qy install devtoolset-10-gcc-c++  python3-devel boost-devel git cmake3 wget && \
   wget https://www.colm.net/files/ragel/ragel-6.10.tar.gz && rm -fr ragel-6.10 && \
   tar xvf ragel-6.10.tar.gz && (cd ragel-6.10 && ./configure --prefix=/usr && make -j4 && make install) && \

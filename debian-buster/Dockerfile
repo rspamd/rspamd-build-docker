@@ -2,7 +2,7 @@ FROM debian:buster
 
 ENV DEBIAN_FRONTEND noninteractive
 ARG build_deps="cmake make pkg-config ragel libc6-dev libevent-dev libglib2.0-dev libicu-dev git rsync wget libmagic-dev libsqlite3-dev libssl-dev libsodium-dev ninja-build fakeroot make ca-certificates less devscripts debhelper dpkg-dev libcurl4-openssl-dev build-essential libopenblas-dev clang-16 clang++-16 llvm-16-dev libpcre2-dev"
-ARG pre_deps="gnupg2 wget git ca-certificates sudo equivs"
+ARG pre_deps="gnupg2 wget git ca-certificates sudo equivs patch"
 ARG compiler_deps="gcc g++ clang-16 clang++-16 llvm-16-dev make libclang-rt-16-dev libclang-rt-16-dev libc++1-16 libc++-16-dev libc++abi-16-dev libunwind-16-dev"
 ARG c_compiler="clang-16"
 ARG cxx_compiler="clang++-16"
