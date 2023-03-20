@@ -21,7 +21,15 @@ RUN set -x; \
   wget https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.gz -O /boost.tar.gz && \
   tar -xf /boost.tar.gz && \
   rm -fr /vectorscan-src/ ; \
-  git clone https://github.com/VectorCamp/vectorscan --depth 1 --branch vectorscan/5.4.8 /vectorscan-src  && \
+  rpmArch="$(rpm --eval '%{_arch}')" && \
+  case "$rpmArch" in \
+    aarch64) \
+      git clone https://github.com/VectorCamp/vectorscan --depth 1 --branch vectorscan/5.4.8 /vectorscan-src  && \
+      ;; \
+    *) \
+      git clone https://github.com/intel/hyperscan/ --depth 1 --branch v5.4.1 /vectorscan-src  && \
+      ;; \
+    esac && \
   (source /opt/rh/devtoolset-10/enable ; cd /vectorscan-src ; mkdir build ; cd build ; cmake3 .. -DCMAKE_INSTALL_PREFIX=/vectorscan -DCMAKE_BUILD_TYPE=Release -DFAT_RUNTIME=ON -DCMAKE_C_FLAGS="-fpic -fPIC" -DCMAKE_CXX_FLAGS="-fPIC -fpic" -DPCRE_SUPPORT_LIBBZ2=OFF -DBOOST_ROOT=/boost_1_76_0; make -j4 ; make install) && \
   rm -fr /vectorscan-src/ ; \
   rm -fr /boost.tar.gz ; \
