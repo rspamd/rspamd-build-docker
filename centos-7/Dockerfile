@@ -52,5 +52,5 @@ RUN rpmArch="$(rpm --eval '%{_arch}')" && \
 
 # Clean up Boost files and yum cache
 RUN rm -fr /boost.tar.gz && \
-  rm -fr /boost_1_76_0
+  rm -fr /boost_1_76_0 && \
   yum -y clean all || true
