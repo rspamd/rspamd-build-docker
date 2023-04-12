@@ -17,13 +17,13 @@ RUN yum -qy --setopt install_weak_deps=False upgrade-minimal && \
 RUN yum -qy install devtoolset-10-gcc-c++ python3-devel boost-devel git cmake3 wget
 
 # Download, build, and install Ragel
-RUN wget https://www.colm.net/files/ragel/ragel-6.10.tar.gz && \
+RUN wget -q https://www.colm.net/files/ragel/ragel-6.10.tar.gz && \
   tar xvf ragel-6.10.tar.gz && \
-  (cd ragel-6.10 && ./configure --prefix=/usr && make -j4 && make install) && \
+  (cd ragel-6.10 && ./configure --prefix=/usr && make -j$(nproc) && make install) && \
   rm -fr ragel-6.10
 
 # Download and extract Boost
-RUN wget https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.gz -O /boost.tar.gz && \
+RUN wget -q https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boost_1_76_0.tar.gz -O /boost.tar.gz && \
   tar -xf /boost.tar.gz
 
 # Clone, build, and install vectorscan or hyperscan depending on the architecture
@@ -36,7 +36,7 @@ RUN rpmArch="$(rpm --eval '%{_arch}')" && \
       git clone https://github.com/intel/hyperscan/ --depth 1 --branch v5.4.1 /vectorscan-src  \
       ;; \
     esac && \
-  (source /opt/rh/devtoolset-10/enable ; cd /vectorscan-src ; mkdir build ; cd build ; cmake3 .. -DCMAKE_INSTALL_PREFIX=/vectorscan -DCMAKE_BUILD_TYPE=Release -DFAT_RUNTIME=ON -DCMAKE_C_FLAGS="-fpic -fPIC" -DCMAKE_CXX_FLAGS="-fPIC -fpic" -DPCRE_SUPPORT_LIBBZ2=OFF -DBOOST_ROOT=/boost_1_76_0; make -j4 ; make install) && \
+  (source /opt/rh/devtoolset-10/enable ; cd /vectorscan-src ; mkdir build ; cd build ; cmake3 .. -DCMAKE_INSTALL_PREFIX=/vectorscan -DCMAKE_BUILD_TYPE=Release -DFAT_RUNTIME=ON -DCMAKE_C_FLAGS="-fpic -fPIC" -DCMAKE_CXX_FLAGS="-fPIC -fpic" -DPCRE_SUPPORT_LIBBZ2=OFF -DBOOST_ROOT=/boost_1_76_0; make -j$(nproc) ; make install) && \
   rm -fr /vectorscan-src/
 
 
