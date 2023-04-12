@@ -189,6 +189,17 @@ steps:
     label_schema: [ docker.dockerfile=debian-buster/Dockerfile ]
     repo: rspamd/pkg
     tags: [ "debian-buster" ]
+- name: debian_bookworm_pkg_image
+  image: plugins/docker
+  volumes:
+  - name: debian-bookworm
+    path: /drone/docker
+  settings:
+    <<: *default_settings
+    dockerfile: debian-bookworm/Dockerfile
+    label_schema: [ docker.dockerfile=debian-bookworm/Dockerfile ]
+    repo: rspamd/pkg
+    tags: [ "debian-bookworm" ]
 
 - name: fedora37_pkg_image
   image: plugins/docker
@@ -221,6 +232,8 @@ volumes:
   temp: {}
 - name: debian-buster
   temp: {}
+- name: debian-bookworm
+  temp: {}
 - name: fedora37
   temp: {}
 
@@ -229,6 +242,6 @@ trigger:
   event: [push, tag, custom]
 ---
 kind: signature
-hmac: 44ff9a72b8bc81c4d30cd4c1672c9e972aebf4e7baca8d641d9de478a743316c
+hmac: 2880af7620736bd97eb58c354e03e7567b8b210f8e695be035be4efb1e05e191
 
 ...
