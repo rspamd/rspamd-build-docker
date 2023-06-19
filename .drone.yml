@@ -122,6 +122,18 @@ steps:
     repo: rspamd/pkg
     tags: [ "centos-8" ]
 
+- name: centos9_pkg_image
+  image: plugins/docker
+  volumes:
+  - name: centos9
+    path: /drone/docker
+  settings:
+    <<: *default_settings
+    dockerfile: centos-9/Dockerfile
+    label_schema: [ docker.dockerfile=centos-9/Dockerfile ]
+    repo: rspamd/pkg
+    tags: [ "centos-9" ]
+
 - name: centos7_pkg_image
   image: plugins/docker
   volumes:
@@ -222,6 +234,8 @@ volumes:
   temp: {}
 - name: centos8
   temp: {}
+- name: centos9
+  temp: {}
 - name: ubuntu-jammy
   temp: {}
 - name: ubuntu-focal
@@ -242,6 +256,6 @@ trigger:
   event: [push, tag, custom]
 ---
 kind: signature
-hmac: 2880af7620736bd97eb58c354e03e7567b8b210f8e695be035be4efb1e05e191
+hmac: 629595ee0d6c1804703b709291ffbc3d54710a0945fb1a2a0621c37ca6c9ed55
 
 ...
