@@ -18,7 +18,7 @@ x-default-settings: &default_settings
 
 x-versions:
   alpine: &alpine_version ALPINE_VERSION=3.17.0
-  fedora: &fedora_version FEDORA_VERSION=37
+  fedora: &fedora_version FEDORA_VERSION=38
 
 steps:
 - name: base_image
@@ -224,6 +224,17 @@ steps:
     label_schema: [ docker.dockerfile=fedora-37/Dockerfile ]
     repo: rspamd/pkg
     tags: [ "fedora-37" ]
+- name: fedora38_pkg_image
+  image: plugins/docker
+  volumes:
+  - name: fedora38
+    path: /drone/docker
+  settings:
+    <<: *default_settings
+    dockerfile: fedora-38/Dockerfile
+    label_schema: [ docker.dockerfile=fedora-38/Dockerfile ]
+    repo: rspamd/pkg
+    tags: [ "fedora-38" ]
 
 volumes:
 - name: fedora
@@ -250,12 +261,14 @@ volumes:
   temp: {}
 - name: fedora37
   temp: {}
+- name: fedora38
+  temp: {}
 
 trigger:
   branch: [ master ]
   event: [push, tag, custom]
 ---
 kind: signature
-hmac: 629595ee0d6c1804703b709291ffbc3d54710a0945fb1a2a0621c37ca6c9ed55
+hmac: 8c6028dd1a3f0be84d70f36635d3b6b1fb06afcd9a2836681caa00f4635e1050
 
 ...
