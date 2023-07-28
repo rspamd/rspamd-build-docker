@@ -30,7 +30,7 @@ RUN wget -q https://boostorg.jfrog.io/artifactory/main/release/1.76.0/source/boo
 RUN rpmArch="$(rpm --eval '%{_arch}')" && \
   case "$rpmArch" in \
     aarch64) \
-      git clone https://github.com/VectorCamp/vectorscan --depth 1 --branch vectorscan/5.4.8 /vectorscan-src  \
+      git clone https://github.com/VectorCamp/vectorscan --depth 1 --branch vectorscan/5.4.9 /vectorscan-src  \
       ;; \
     *) \
       git clone https://github.com/intel/hyperscan/ --depth 1 --branch v5.4.1 /vectorscan-src  \
