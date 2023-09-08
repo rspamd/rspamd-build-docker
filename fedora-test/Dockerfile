@@ -11,6 +11,7 @@ FROM fedora:${FEDORA_VERSION}
 #   openssl-libs
 #   pcre
 #   sqlite-libs
+#   hyperscan
 
 # tools;
 #   dnf-plugins-core - for yum debuginfo-install
@@ -21,7 +22,7 @@ RUN set -x; \
 	yum -qy --setopt install_weak_deps=False upgrade-minimal && \
 	yum  -y --setopt install_weak_deps=False install \
 		dnf-plugins-core gdb llvm \
-		file-libs glib2 libevent libicu libsodium luajit openssl-libs pcre sqlite-libs && \
+		file-libs glib2 libevent libicu libsodium luajit openssl-libs pcre sqlite-libs hyperscan && \
 	yum -qy --setopt install_weak_deps=False debuginfo-install \
 		glibc glib2 libsodium luajit hyperscan && \
 	yum -qy remove dnf-plugins-core && \

@@ -20,4 +20,5 @@ RUN set -x; \
 	apt-get -qy remove gpg gpg-agent && \
 	apt-get -qy autoremove && \
 	apt-get -q clean && \
+  mkdir -p /var/lib/rspamd && \
 	rm -rf /var/cache/debconf /var/lib/apt/lists
