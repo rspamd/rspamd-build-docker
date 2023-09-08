@@ -3,7 +3,7 @@
 # LTS (Jammy Jellyfish)
 FROM rspamd/ci:ubuntu-gcc
 
-ARG build_deps="cmake make pkg-config ragel libc6-dev libevent-dev libglib2.0-dev libicu-dev libluajit-5.1-dev libmagic-dev libsqlite3-dev libssl-dev libunwind-dev libsodium-dev ninja-build"
+ARG build_deps="cmake make pkg-config ragel libc6-dev libevent-dev libglib2.0-dev libicu-dev libluajit-5.1-dev libmagic-dev libsqlite3-dev libssl-dev libunwind-dev libsodium-dev ninja-build libhyperscan-dev"
 
 RUN set -x; \
 	apt-get -q update && \
