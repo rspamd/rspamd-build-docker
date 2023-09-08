@@ -23,7 +23,7 @@ RUN set -x; \
 		dnf-plugins-core gdb llvm \
 		file-libs glib2 libevent libicu libsodium luajit openssl-libs pcre sqlite-libs && \
 	yum -qy --setopt install_weak_deps=False debuginfo-install \
-		glibc glib2 libsodium luajit && \
+		glibc glib2 libsodium luajit hyperscan && \
 	yum -qy remove dnf-plugins-core && \
 	rm /var/log/*.log && rm -r /var/cache/dnf
 
