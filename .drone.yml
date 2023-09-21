@@ -134,14 +134,6 @@ steps:
     label_schema: [ docker.dockerfile=ubuntu-focal/Dockerfile ]
     repo: rspamd/pkg
     tags: [ "ubuntu-focal" ]
-- name: ubuntu_bionic_pkg_image
-  image: plugins/docker
-  settings:
-    <<: *default_settings
-    dockerfile: ubuntu-bionic/Dockerfile
-    label_schema: [ docker.dockerfile=ubuntu-bionic/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "ubuntu-bionic" ]
 - name: debian_bullseye_pkg_image
   image: plugins/docker
   settings:
@@ -150,14 +142,6 @@ steps:
     label_schema: [ docker.dockerfile=debian-bullseye/Dockerfile ]
     repo: rspamd/pkg
     tags: [ "debian-bullseye" ]
-- name: debian_buster_pkg_image
-  image: plugins/docker
-  settings:
-    <<: *default_settings
-    dockerfile: debian-buster/Dockerfile
-    label_schema: [ docker.dockerfile=debian-buster/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "debian-buster" ]
 - name: debian_bookworm_pkg_image
   image: plugins/docker
   settings:
@@ -166,23 +150,6 @@ steps:
     label_schema: [ docker.dockerfile=debian-bookworm/Dockerfile ]
     repo: rspamd/pkg
     tags: [ "debian-bookworm" ]
-
-- name: fedora37_pkg_image
-  image: plugins/docker
-  settings:
-    <<: *default_settings
-    dockerfile: fedora-37/Dockerfile
-    label_schema: [ docker.dockerfile=fedora-37/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "fedora-37" ]
-- name: fedora38_pkg_image
-  image: plugins/docker
-  settings:
-    <<: *default_settings
-    dockerfile: fedora-38/Dockerfile
-    label_schema: [ docker.dockerfile=fedora-38/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "fedora-38" ]
 
 trigger:
   branch: [ master ]
