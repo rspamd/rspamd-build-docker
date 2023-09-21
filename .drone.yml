@@ -13,7 +13,6 @@ platform:
 x-default-settings: &default_settings
   username: { from_secret: docker_username }
   password: { from_secret: docker_password }
-  storage_path: /drone/docker
   purge: false
 
 x-versions:
@@ -23,9 +22,6 @@ x-versions:
 steps:
 - name: base_image
   image: plugins/docker
-  volumes:
-  - name: ubuntu
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: ubuntu-gcc/Dockerfile
@@ -36,9 +32,6 @@ steps:
 
 - name: build_image
   image: plugins/docker
-  volumes:
-  - name: ubuntu
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: ubuntu-build/Dockerfile
@@ -49,9 +42,6 @@ steps:
 
 - name: test_image
   image: plugins/docker
-  volumes:
-  - name: ubuntu
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: ubuntu-test/Dockerfile
@@ -62,9 +52,6 @@ steps:
 
 - name: func_test_image
   image: plugins/docker
-  volumes:
-  - name: ubuntu
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: ubuntu-test-func/Dockerfile
@@ -85,9 +72,6 @@ steps:
 
 - name: fedora_build_image
   image: plugins/docker
-  volumes:
-  - name: fedora
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: fedora-build/Dockerfile
@@ -98,9 +82,6 @@ steps:
 
 - name: fedora_test_image
   image: plugins/docker
-  volumes:
-  - name: fedora
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: fedora-test/Dockerfile
@@ -112,9 +93,6 @@ steps:
 
 - name: centos8_pkg_image
   image: plugins/docker
-  volumes:
-  - name: centos8
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: centos-8/Dockerfile
@@ -124,9 +102,6 @@ steps:
 
 - name: centos9_pkg_image
   image: plugins/docker
-  volumes:
-  - name: centos9
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: centos-9/Dockerfile
@@ -136,9 +111,6 @@ steps:
 
 - name: centos7_pkg_image
   image: plugins/docker
-  volumes:
-  - name: centos7
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: centos-7/Dockerfile
@@ -148,9 +120,6 @@ steps:
 
 - name: ubuntu_jammy_pkg_image
   image: plugins/docker
-  volumes:
-  - name: ubuntu-jammy
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: ubuntu-jammy/Dockerfile
@@ -159,9 +128,6 @@ steps:
     tags: [ "ubuntu-jammy" ]
 - name: ubuntu_focal_pkg_image
   image: plugins/docker
-  volumes:
-  - name: ubuntu-focal
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: ubuntu-focal/Dockerfile
@@ -170,9 +136,6 @@ steps:
     tags: [ "ubuntu-focal" ]
 - name: ubuntu_bionic_pkg_image
   image: plugins/docker
-  volumes:
-  - name: ubuntu-bionic
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: ubuntu-bionic/Dockerfile
@@ -181,9 +144,6 @@ steps:
     tags: [ "ubuntu-bionic" ]
 - name: debian_bullseye_pkg_image
   image: plugins/docker
-  volumes:
-  - name: debian-bullseye
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: debian-bullseye/Dockerfile
@@ -192,9 +152,6 @@ steps:
     tags: [ "debian-bullseye" ]
 - name: debian_buster_pkg_image
   image: plugins/docker
-  volumes:
-  - name: debian-buster
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: debian-buster/Dockerfile
@@ -203,9 +160,6 @@ steps:
     tags: [ "debian-buster" ]
 - name: debian_bookworm_pkg_image
   image: plugins/docker
-  volumes:
-  - name: debian-bookworm
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: debian-bookworm/Dockerfile
@@ -215,9 +169,6 @@ steps:
 
 - name: fedora37_pkg_image
   image: plugins/docker
-  volumes:
-  - name: fedora37
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: fedora-37/Dockerfile
@@ -226,43 +177,12 @@ steps:
     tags: [ "fedora-37" ]
 - name: fedora38_pkg_image
   image: plugins/docker
-  volumes:
-  - name: fedora38
-    path: /drone/docker
   settings:
     <<: *default_settings
     dockerfile: fedora-38/Dockerfile
     label_schema: [ docker.dockerfile=fedora-38/Dockerfile ]
     repo: rspamd/pkg
     tags: [ "fedora-38" ]
-
-volumes:
-- name: fedora
-  temp: {}
-- name: ubuntu
-  temp: {}
-- name: centos7
-  temp: {}
-- name: centos8
-  temp: {}
-- name: centos9
-  temp: {}
-- name: ubuntu-jammy
-  temp: {}
-- name: ubuntu-focal
-  temp: {}
-- name: ubuntu-bionic
-  temp: {}
-- name: debian-bullseye
-  temp: {}
-- name: debian-buster
-  temp: {}
-- name: debian-bookworm
-  temp: {}
-- name: fedora37
-  temp: {}
-- name: fedora38
-  temp: {}
 
 trigger:
   branch: [ master ]
