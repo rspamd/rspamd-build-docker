@@ -1,274 +1,1221 @@
 ---
-# Build Docker images using https://drone.io/ CI/CD and publish it to https://hub.docker.com/r/rspamd/
-# Documentation http://plugins.drone.io/drone-plugins/drone-docker/ is not comprehensive
-# Refer to the source: https://github.com/drone-plugins/drone-docker
-kind: pipeline
-type: docker
-name: default-amd64
-
-platform:
-  os: linux
-  arch: amd64
-
-x-default-settings: &default_settings
-  username: { from_secret: docker_username }
-  password: { from_secret: docker_password }
-  storage_path: /drone/docker
-  purge: false
-
-x-versions:
-  alpine: &alpine_version ALPINE_VERSION=3.17.0
-  fedora: &fedora_version FEDORA_VERSION=38
-
-steps:
-- name: base_image
-  image: plugins/docker
-  volumes:
-  - name: ubuntu
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: ubuntu-gcc/Dockerfile
-    label_schema: [ docker.dockerfile=ubuntu-gcc/Dockerfile ]
-    build_args: [ UBUNTU_VERSION=22.04 ]
-    repo: rspamd/ci
-    tags: [ "ubuntu-gcc" ]
-
-- name: build_image
-  image: plugins/docker
-  volumes:
-  - name: ubuntu
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: ubuntu-build/Dockerfile
-    label_schema: [ docker.dockerfile=ubuntu-build/Dockerfile ]
-    repo: rspamd/ci
-    tags: [ "ubuntu-build" ]
-  depends_on: [ base_image ]
-
-- name: test_image
-  image: plugins/docker
-  volumes:
-  - name: ubuntu
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: ubuntu-test/Dockerfile
-    label_schema: [ docker.dockerfile=ubuntu-test/Dockerfile ]
-    repo: rspamd/ci
-    tags: [ "ubuntu-test" ]
-  depends_on: [ build_image ]
-
-- name: func_test_image
-  image: plugins/docker
-  volumes:
-  - name: ubuntu
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: ubuntu-test-func/Dockerfile
-    label_schema: [ docker.dockerfile=ubuntu-test-func/Dockerfile ]
-    repo: rspamd/ci
-    tags: [ "ubuntu-test-func" ]
-  depends_on: [ test_image ]
-
-- name: perl_tidyall_image
-  image: plugins/docker
-  settings:
-    <<: *default_settings
-    dockerfile: perl-tidyall/Dockerfile
-    label_schema: [ docker.dockerfile=perl-tidyall/Dockerfile ]
-    build_args: [ *alpine_version ]
-    repo: rspamd/ci
-    tags: [ "perl-tidyall" ]
-
-- name: fedora_build_image
-  image: plugins/docker
-  volumes:
-  - name: fedora
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: fedora-build/Dockerfile
-    label_schema: [ docker.dockerfile=fedora-build/Dockerfile ]
-    build_args: [ *fedora_version ]
-    repo: rspamd/ci
-    tags: [ "fedora-build" ]
-
-- name: fedora_test_image
-  image: plugins/docker
-  volumes:
-  - name: fedora
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: fedora-test/Dockerfile
-    label_schema: [ docker.dockerfile=fedora-test/Dockerfile ]
-    build_args: [ *fedora_version ]
-    repo: rspamd/ci
-    tags: [ "fedora-test" ]
-  depends_on: [ fedora_build_image ]
-
-- name: centos8_pkg_image
-  image: plugins/docker
-  volumes:
-  - name: centos8
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: centos-8/Dockerfile
-    label_schema: [ docker.dockerfile=centos-8/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "centos-8" ]
-
-- name: centos9_pkg_image
-  image: plugins/docker
-  volumes:
-  - name: centos9
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: centos-9/Dockerfile
-    label_schema: [ docker.dockerfile=centos-9/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "centos-9" ]
-
-- name: centos7_pkg_image
-  image: plugins/docker
-  volumes:
-  - name: centos7
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: centos-7/Dockerfile
-    label_schema: [ docker.dockerfile=centos-7/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "centos-7" ]
-
-- name: ubuntu_jammy_pkg_image
-  image: plugins/docker
-  volumes:
-  - name: ubuntu-jammy
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: ubuntu-jammy/Dockerfile
-    label_schema: [ docker.dockerfile=ubuntu-jammy/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "ubuntu-jammy" ]
-- name: ubuntu_focal_pkg_image
-  image: plugins/docker
-  volumes:
-  - name: ubuntu-focal
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: ubuntu-focal/Dockerfile
-    label_schema: [ docker.dockerfile=ubuntu-focal/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "ubuntu-focal" ]
-- name: ubuntu_bionic_pkg_image
-  image: plugins/docker
-  volumes:
-  - name: ubuntu-bionic
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: ubuntu-bionic/Dockerfile
-    label_schema: [ docker.dockerfile=ubuntu-bionic/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "ubuntu-bionic" ]
-- name: debian_bullseye_pkg_image
-  image: plugins/docker
-  volumes:
-  - name: debian-bullseye
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: debian-bullseye/Dockerfile
-    label_schema: [ docker.dockerfile=debian-bullseye/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "debian-bullseye" ]
-- name: debian_buster_pkg_image
-  image: plugins/docker
-  volumes:
-  - name: debian-buster
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: debian-buster/Dockerfile
-    label_schema: [ docker.dockerfile=debian-buster/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "debian-buster" ]
-- name: debian_bookworm_pkg_image
-  image: plugins/docker
-  volumes:
-  - name: debian-bookworm
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: debian-bookworm/Dockerfile
-    label_schema: [ docker.dockerfile=debian-bookworm/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "debian-bookworm" ]
-
-- name: fedora37_pkg_image
-  image: plugins/docker
-  volumes:
-  - name: fedora37
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: fedora-37/Dockerfile
-    label_schema: [ docker.dockerfile=fedora-37/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "fedora-37" ]
-- name: fedora38_pkg_image
-  image: plugins/docker
-  volumes:
-  - name: fedora38
-    path: /drone/docker
-  settings:
-    <<: *default_settings
-    dockerfile: fedora-38/Dockerfile
-    label_schema: [ docker.dockerfile=fedora-38/Dockerfile ]
-    repo: rspamd/pkg
-    tags: [ "fedora-38" ]
-
-volumes:
-- name: fedora
-  temp: {}
-- name: ubuntu
-  temp: {}
-- name: centos7
-  temp: {}
-- name: centos8
-  temp: {}
-- name: centos9
-  temp: {}
-- name: ubuntu-jammy
-  temp: {}
-- name: ubuntu-focal
-  temp: {}
-- name: ubuntu-bionic
-  temp: {}
-- name: debian-bullseye
-  temp: {}
-- name: debian-buster
-  temp: {}
-- name: debian-bookworm
-  temp: {}
-- name: fedora37
-  temp: {}
-- name: fedora38
-  temp: {}
-
-trigger:
-  branch: [ master ]
-  event: [push, tag, custom]
+{
+   "kind": "pipeline",
+   "name": "base_image_amd64",
+   "platform": {
+      "arch": "amd64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "base_image",
+         "settings": {
+            "build_args": [
+               "UBUNTU_VERSION=22.04"
+            ],
+            "dockerfile": "ubuntu-gcc/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-gcc/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "ubuntu-gcc-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
 ---
-kind: signature
-hmac: 4eb24f3de17613594fe767b784366f695b2560e4c353675dae0ffa7f72345981
-
+{
+   "kind": "pipeline",
+   "name": "base_image_arm64",
+   "platform": {
+      "arch": "arm64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "base_image",
+         "settings": {
+            "build_args": [
+               "UBUNTU_VERSION=22.04"
+            ],
+            "dockerfile": "ubuntu-gcc/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-gcc/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "ubuntu-gcc-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "depends_on": [
+      "base_image_amd64"
+   ],
+   "kind": "pipeline",
+   "name": "build_image_amd64",
+   "platform": {
+      "arch": "amd64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "build_image",
+         "settings": {
+            "build_args": [
+               "UBUNTU_GCC_IMAGE=rspamd/ci:ubuntu-gcc-amd64"
+            ],
+            "dockerfile": "ubuntu-build/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-build/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "ubuntu-build-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "depends_on": [
+      "base_image_arm64"
+   ],
+   "kind": "pipeline",
+   "name": "build_image_arm64",
+   "platform": {
+      "arch": "arm64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "build_image",
+         "settings": {
+            "build_args": [
+               "UBUNTU_GCC_IMAGE=rspamd/ci:ubuntu-gcc-arm64"
+            ],
+            "dockerfile": "ubuntu-build/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-build/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "ubuntu-build-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "kind": "pipeline",
+   "name": "fedora_build_image_amd64",
+   "platform": {
+      "arch": "amd64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "fedora_build_image",
+         "settings": {
+            "build_args": [
+               "FEDORA_VERSION=38"
+            ],
+            "dockerfile": "fedora-build/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=fedora-build/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "fedora-build-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "kind": "pipeline",
+   "name": "fedora_build_image_arm64",
+   "platform": {
+      "arch": "arm64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "fedora_build_image",
+         "settings": {
+            "build_args": [
+               "FEDORA_VERSION=38"
+            ],
+            "dockerfile": "fedora-build/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=fedora-build/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "fedora-build-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "depends_on": [
+      "base_image_amd64",
+      "build_image_amd64"
+   ],
+   "kind": "pipeline",
+   "name": "test_image_amd64",
+   "platform": {
+      "arch": "amd64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "test_image",
+         "settings": {
+            "build_args": [
+               "UBUNTU_BUILD_IMAGE=rspamd/ci:ubuntu-build-amd64",
+               "UBUNTU_GCC_IMAGE=rspamd/ci:ubuntu-gcc-amd64"
+            ],
+            "dockerfile": "ubuntu-test/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-test/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "ubuntu-test-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            },
+            "volumes": [
+               {
+                  "name": "dump-ubuntu",
+                  "path": "/dump"
+               }
+            ]
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker",
+   "volumes": [
+      {
+         "name": "dump-ubuntu",
+         "temp": { }
+      }
+   ]
+}
+---
+{
+   "depends_on": [
+      "base_image_arm64",
+      "build_image_arm64"
+   ],
+   "kind": "pipeline",
+   "name": "test_image_arm64",
+   "platform": {
+      "arch": "arm64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "test_image",
+         "settings": {
+            "build_args": [
+               "UBUNTU_BUILD_IMAGE=rspamd/ci:ubuntu-build-arm64",
+               "UBUNTU_GCC_IMAGE=rspamd/ci:ubuntu-gcc-arm64"
+            ],
+            "dockerfile": "ubuntu-test/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-test/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "ubuntu-test-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            },
+            "volumes": [
+               {
+                  "name": "dump-ubuntu",
+                  "path": "/dump"
+               }
+            ]
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker",
+   "volumes": [
+      {
+         "name": "dump-ubuntu",
+         "temp": { }
+      }
+   ]
+}
+---
+{
+   "depends_on": [
+      "build_image_amd64",
+      "fedora_build_image_amd64",
+      "test_image_amd64"
+   ],
+   "kind": "pipeline",
+   "name": "ci-images-amd64",
+   "platform": {
+      "arch": "amd64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "func_test_image",
+         "settings": {
+            "build_args": [
+               "UBUNTU_TEST_IMAGE=rspamd/ci:ubuntu-test-amd64"
+            ],
+            "dockerfile": "ubuntu-test-func/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-test-func/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "ubuntu-test-func-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "fedora_test_image",
+         "settings": {
+            "build_args": [
+               "FEDORA_BUILD_IMAGE=rspamd/ci:fedora-build-amd64",
+               "FEDORA_VERSION=38"
+            ],
+            "dockerfile": "fedora-test/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=fedora-test/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "fedora-test-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            },
+            "volumes": [
+               {
+                  "name": "dump-fedora",
+                  "path": "/dump"
+               }
+            ]
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker",
+   "volumes": [
+      {
+         "name": "dump-fedora",
+         "temp": { }
+      }
+   ]
+}
+---
+{
+   "depends_on": [
+      "build_image_arm64",
+      "fedora_build_image_arm64",
+      "test_image_arm64"
+   ],
+   "kind": "pipeline",
+   "name": "ci-images-arm64",
+   "platform": {
+      "arch": "arm64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "func_test_image",
+         "settings": {
+            "build_args": [
+               "UBUNTU_TEST_IMAGE=rspamd/ci:ubuntu-test-arm64"
+            ],
+            "dockerfile": "ubuntu-test-func/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-test-func/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "ubuntu-test-func-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "fedora_test_image",
+         "settings": {
+            "build_args": [
+               "FEDORA_BUILD_IMAGE=rspamd/ci:fedora-build-arm64",
+               "FEDORA_VERSION=38"
+            ],
+            "dockerfile": "fedora-test/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=fedora-test/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "fedora-test-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            },
+            "volumes": [
+               {
+                  "name": "dump-fedora",
+                  "path": "/dump"
+               }
+            ]
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker",
+   "volumes": [
+      {
+         "name": "dump-fedora",
+         "temp": { }
+      }
+   ]
+}
+---
+{
+   "kind": "pipeline",
+   "name": "pkg-images-amd64",
+   "platform": {
+      "arch": "amd64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "centos8_pkg_image",
+         "settings": {
+            "dockerfile": "centos-8/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=centos-8/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "centos-8-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "centos9_pkg_image",
+         "settings": {
+            "dockerfile": "centos-9/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=centos-9/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "centos-9-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "centos7_pkg_image",
+         "settings": {
+            "dockerfile": "centos-7/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=centos-7/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "centos-7-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "ubuntu_jammy_pkg_image",
+         "settings": {
+            "dockerfile": "ubuntu-jammy/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-jammy/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "ubuntu-jammy-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "ubuntu_focal_pkg_image",
+         "settings": {
+            "dockerfile": "ubuntu-focal/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-focal/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "ubuntu-focal-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "debian_bullseye_pkg_image",
+         "settings": {
+            "dockerfile": "debian-bullseye/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=debian-bullseye/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "debian-bullseye-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "debian_bookworm_pkg_image",
+         "settings": {
+            "dockerfile": "debian-bookworm/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=debian-bookworm/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "debian-bookworm-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "kind": "pipeline",
+   "name": "pkg-images-arm64",
+   "platform": {
+      "arch": "arm64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "centos8_pkg_image",
+         "settings": {
+            "dockerfile": "centos-8/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=centos-8/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "centos-8-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "centos9_pkg_image",
+         "settings": {
+            "dockerfile": "centos-9/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=centos-9/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "centos-9-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "centos7_pkg_image",
+         "settings": {
+            "dockerfile": "centos-7/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=centos-7/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "centos-7-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "ubuntu_jammy_pkg_image",
+         "settings": {
+            "dockerfile": "ubuntu-jammy/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-jammy/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "ubuntu-jammy-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "ubuntu_focal_pkg_image",
+         "settings": {
+            "dockerfile": "ubuntu-focal/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-focal/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "ubuntu-focal-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "debian_bullseye_pkg_image",
+         "settings": {
+            "dockerfile": "debian-bullseye/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=debian-bullseye/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "debian-bullseye-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "debian_bookworm_pkg_image",
+         "settings": {
+            "dockerfile": "debian-bookworm/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=debian-bookworm/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/pkg",
+            "tags": [
+               "debian-bookworm-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "depends_on": [
+      "ci-images-amd64",
+      "ci-images-arm64"
+   ],
+   "kind": "pipeline",
+   "name": "multiarch_ci_images",
+   "steps": [
+      {
+         "image": "plugins/manifest",
+         "name": "ci_ubuntu_build",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/ci:ubuntu-build",
+            "template": "rspamd/ci:ubuntu-build-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/manifest",
+         "name": "ci_ubuntu_gcc",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/ci:ubuntu-gcc",
+            "template": "rspamd/ci:ubuntu-gcc-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/manifest",
+         "name": "ci_ubuntu_test",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/ci:ubuntu-test",
+            "template": "rspamd/ci:ubuntu-test-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/manifest",
+         "name": "ci_ubuntu_test_func",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/ci:ubuntu-test-func",
+            "template": "rspamd/ci:ubuntu-test-func-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/manifest",
+         "name": "ci_fedora_build",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/ci:fedora-build",
+            "template": "rspamd/ci:fedora-build-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/manifest",
+         "name": "ci_fedora_test",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/ci:fedora-test",
+            "template": "rspamd/ci:fedora-test-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "depends_on": [
+      "pkg-images-amd64",
+      "pkg-images-arm64"
+   ],
+   "kind": "pipeline",
+   "name": "multiarch_pkg_images",
+   "steps": [
+      {
+         "image": "plugins/manifest",
+         "name": "pkg_centos7",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/pkg:centos-7",
+            "template": "rspamd/pkg:centos-7-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/manifest",
+         "name": "pkg_centos8",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/pkg:centos-8",
+            "template": "rspamd/pkg:centos-8-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/manifest",
+         "name": "pkg_centos9",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/pkg:centos-9",
+            "template": "rspamd/pkg:centos-9-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/manifest",
+         "name": "pkg_ubuntu2004",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/pkg:ubuntu-focal",
+            "template": "rspamd/pkg:ubuntu-focal-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/manifest",
+         "name": "pkg_ubuntu2204",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/pkg:ubuntu-jammy",
+            "template": "rspamd/pkg:ubuntu-jammy-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/manifest",
+         "name": "pkg_debian11",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/pkg:debian-bullseye",
+            "template": "rspamd/pkg:debian-bullseye-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/manifest",
+         "name": "pkg_debian12",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/pkg:debian-bookworm",
+            "template": "rspamd/pkg:debian-bookworm-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "kind": "pipeline",
+   "name": "tidyall",
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "perl_tidyall_image",
+         "settings": {
+            "build_args": [
+               "ALPINE_VERSION=3.17.0"
+            ],
+            "dockerfile": "perl-tidyall/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=perl-tidyall/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/ci",
+            "tags": [
+               "perl-tidyall"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "hmac": "d3741c63a0a3494635d7644c839895e70b69761067601b734a284093cd51d91d",
+   "kind": "signature"
+}
 ...
