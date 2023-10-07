@@ -1,7 +1,7 @@
 FROM debian:bullseye
 
 ENV DEBIAN_FRONTEND noninteractive
-ARG build_deps="cmake make pkg-config ragel libc6-dev libevent-dev libglib2.0-dev libicu-dev git rsync wget libmagic-dev libsqlite3-dev libssl-dev libunwind-dev libsodium-dev ninja-build fakeroot make ca-certificates less devscripts debhelper dpkg-dev libcurl4-openssl-dev build-essential libopenblas-dev git libpcre2-dev"
+ARG build_deps="binutils-dev cmake make pkg-config ragel libc6-dev libevent-dev libglib2.0-dev libicu-dev git rsync wget libmagic-dev libsqlite3-dev libssl-dev libunwind-dev libsodium-dev ninja-build fakeroot make ca-certificates less devscripts debhelper dpkg-dev libcurl4-openssl-dev build-essential libopenblas-dev git libpcre2-dev"
 ARG pre_deps="gnupg2 wget git ca-certificates sudo equivs patch devscripts"
 ARG compiler_deps="gcc g++ make libunwind-dev"
 ARG c_compiler="gcc"
