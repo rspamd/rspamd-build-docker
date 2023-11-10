@@ -232,104 +232,20 @@ local build_ci_images(arch) = {
   ],
 } + platform(arch) + trigger + pipeline_defaults;
 
-local build_pkg_images(arch) = {
-  name: 'pkg-images-' + arch,
+local build_pkg_image(dist, arch) = {
+  name: std.format('pkg-%s-%s', [dist, arch]),
   steps: [
     {
-      name: 'centos8_pkg_image',
+      name: std.format('pkg-%s-%s', [dist, arch]),
       image: 'plugins/docker',
       settings: {
-        dockerfile: 'centos-8/Dockerfile',
+        dockerfile: dist + '/Dockerfile',
         label_schema: [
-          'docker.dockerfile=centos-8/Dockerfile',
+          'docker.dockerfile=' + dist + '/Dockerfile',
         ],
         repo: pkg_image,
         tags: [
-          'centos-8-' + arch,
-        ],
-      } + docker_defaults,
-    },
-    {
-      name: 'centos9_pkg_image',
-      image: 'plugins/docker',
-      settings: {
-        dockerfile: 'centos-9/Dockerfile',
-        label_schema: [
-          'docker.dockerfile=centos-9/Dockerfile',
-        ],
-        repo: pkg_image,
-        tags: [
-          'centos-9-' + arch,
-        ],
-      } + docker_defaults,
-    },
-    {
-      name: 'centos7_pkg_image',
-      image: 'plugins/docker',
-      settings: {
-        dockerfile: 'centos-7/Dockerfile',
-        label_schema: [
-          'docker.dockerfile=centos-7/Dockerfile',
-        ],
-        repo: pkg_image,
-        tags: [
-          'centos-7-' + arch,
-        ],
-      } + docker_defaults,
-    },
-    {
-      name: 'ubuntu_jammy_pkg_image',
-      image: 'plugins/docker',
-      settings: {
-        dockerfile: 'ubuntu-jammy/Dockerfile',
-        label_schema: [
-          'docker.dockerfile=ubuntu-jammy/Dockerfile',
-        ],
-        repo: pkg_image,
-        tags: [
-          'ubuntu-jammy-' + arch,
-        ],
-      } + docker_defaults,
-    },
-    {
-      name: 'ubuntu_focal_pkg_image',
-      image: 'plugins/docker',
-      settings: {
-        dockerfile: 'ubuntu-focal/Dockerfile',
-        label_schema: [
-          'docker.dockerfile=ubuntu-focal/Dockerfile',
-        ],
-        repo: pkg_image,
-        tags: [
-          'ubuntu-focal-' + arch,
-        ],
-      } + docker_defaults,
-    },
-    {
-      name: 'debian_bullseye_pkg_image',
-      image: 'plugins/docker',
-      settings: {
-        dockerfile: 'debian-bullseye/Dockerfile',
-        label_schema: [
-          'docker.dockerfile=debian-bullseye/Dockerfile',
-        ],
-        repo: pkg_image,
-        tags: [
-          'debian-bullseye-' + arch,
-        ],
-      } + docker_defaults,
-    },
-    {
-      name: 'debian_bookworm_pkg_image',
-      image: 'plugins/docker',
-      settings: {
-        dockerfile: 'debian-bookworm/Dockerfile',
-        label_schema: [
-          'docker.dockerfile=debian-bookworm/Dockerfile',
-        ],
-        repo: pkg_image,
-        tags: [
-          'debian-bookworm-' + arch,
+          dist + '-' + arch,
         ],
       } + docker_defaults,
     },
@@ -368,8 +284,20 @@ local multiarch_ci_images = {
 local multiarch_pkg_images = {
   name: 'multiarch_pkg_images',
   depends_on: [
-    'pkg-images-amd64',
-    'pkg-images-arm64',
+    'pkg-centos-7-amd64',
+    'pkg-centos-7-arm64',
+    'pkg-centos-8-amd64',
+    'pkg-centos-8-arm64',
+    'pkg-centos-9-amd64',
+    'pkg-centos-9-arm64',
+    'pkg-debian-bullseye-amd64',
+    'pkg-debian-bullseye-arm64',
+    'pkg-debian-bookworm-amd64',
+    'pkg-debian-bookworm-arm64',
+    'pkg-ubuntu-focal-amd64',
+    'pkg-ubuntu-focal-arm64',
+    'pkg-ubuntu-jammy-amd64',
+    'pkg-ubuntu-jammy-arm64',
   ],
   steps: [
     multiarch_step('pkg_centos7', pkg_image, 'centos-7'),
@@ -398,8 +326,20 @@ local signature_placeholder = {
   build_test_image('arm64'),
   build_ci_images('amd64'),
   build_ci_images('arm64'),
-  build_pkg_images('amd64'),
-  build_pkg_images('arm64'),
+  build_pkg_image('centos-7', 'amd64'),
+  build_pkg_image('centos-7', 'arm64'),
+  build_pkg_image('centos-8', 'amd64'),
+  build_pkg_image('centos-8', 'arm64'),
+  build_pkg_image('centos-9', 'amd64'),
+  build_pkg_image('centos-9', 'arm64'),
+  build_pkg_image('debian-bullseye', 'amd64'),
+  build_pkg_image('debian-bullseye', 'arm64'),
+  build_pkg_image('debian-bookworm', 'amd64'),
+  build_pkg_image('debian-bookworm', 'arm64'),
+  build_pkg_image('ubuntu-focal', 'amd64'),
+  build_pkg_image('ubuntu-focal', 'arm64'),
+  build_pkg_image('ubuntu-jammy', 'amd64'),
+  build_pkg_image('ubuntu-jammy', 'arm64'),
   multiarch_ci_images,
   multiarch_pkg_images,
   tidyall_pipeline,
