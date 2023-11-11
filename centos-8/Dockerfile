@@ -25,7 +25,14 @@ RUN set -x; \
        rm -fr /vectorscan-src/ ; \
       ;; \
     *) \
-       dnf -qy install hyperscan-devel jemalloc-devel  \
+       dnf -qy install hyperscan-devel jemalloc-devel  ; \
       ;; \
   esac && \
   rm /var/log/*.log && rm -r /var/cache/dnf 
+
+# Install fasttext
+RUN    rm -fr /fasttext-src/ ; git clone https://github.com/rspamd/fastText.git --depth 1 /fasttext-src && \
+       (source /opt/rh/gcc-toolset-10/enable ; cd /fasttext-src ; mkdir build ; cd build ; cmake .. -DCMAKE_INSTALL_PREFIX=/fasttext -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-fpic -fPIC" -DCMAKE_CXX_FLAGS="-fPIC -fpic"; make -j4 ; make install) ; \
+       mv -f /fasttext/lib/libfasttext_pic.a /fasttext/lib/libfasttext.a ; \
+       rm -f /fasttext/lib/*.so ; \
+       rm -fr /fasttext-src/ 

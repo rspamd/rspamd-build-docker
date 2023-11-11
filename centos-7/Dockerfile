@@ -50,6 +50,13 @@ RUN rpmArch="$(rpm --eval '%{_arch}')" && \
       ;; \
   esac
 
+# Install fasttext
+RUN    rm -fr /fasttext-src/ ; git clone https://github.com/rspamd/fastText.git --depth 1 /fasttext-src && \
+       (source /opt/rh/devtoolset-10/enable ; cd /fasttext-src ; mkdir build ; cd build ; cmake .. -DCMAKE_INSTALL_PREFIX=/fasttext -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-fpic -fPIC" -DCMAKE_CXX_FLAGS="-fPIC -fpic"; make -j4 ; make install) ; \
+       mv -f /fasttext/lib/libfasttext_pic.a /fasttext/lib/libfasttext.a ; \
+       rm -f /fasttext/lib/*.so ; \
+       rm -fr /fasttext-src/
+
 # Clean up Boost files and yum cache
 RUN rm -fr /boost.tar.gz && \
   rm -fr /boost_1_76_0 && \
