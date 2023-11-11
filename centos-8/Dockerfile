@@ -9,7 +9,7 @@ RUN set -x; \
   dnf config-manager --set-enabled ol8_codeready_builder && \
   dnf -qy --setopt install_weak_deps=False upgrade-minimal && \
   dnf  -y --setopt install_weak_deps=False install clang compiler-rt gcc gcc-c++ lld cmake make pkgconf-pkg-config wget \
-  	perl ragel file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel fasttext-devel \
+  	perl ragel file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel \
   	clang-devel llvm-devel libsodium-devel git rpm-build openblas-devel libunwind-devel lapack lapack-devel blas-devel blas pcre2-devel sudo gcc-toolset-10-gcc-c++ binutils systemd gcc-toolset-10-annobin gcc-toolset-10-binutils-devel gcc-toolset-10-libasan-devel patch && \
   wget https://www.colm.net/files/ragel/ragel-6.10.tar.gz && rm -fr ragel-6.10 && \
   tar xvf ragel-6.10.tar.gz && (cd ragel-6.10 && ./configure --prefix=/usr && make -j4 && make install) && \

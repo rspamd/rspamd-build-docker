@@ -10,7 +10,7 @@ RUN set -x; \
 # Upgrade minimal packages and install dependencies
 RUN yum -qy --setopt install_weak_deps=False upgrade-minimal && \
   yum -y --setopt install_weak_deps=False install clang compiler-rt gcc gcc-c++ cmake3 make pkgconf-pkg-config \
-    perl ragel file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel fasttext-devel \
+    perl ragel file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel \
     clang-devel llvm-devel libsodium-devel git rpm-build openblas-devel libunwind-devel lapack lapack-devel blas-devel blas pcre2-devel devtoolset-10-llvm-devel devtoolset-10-clang-devel devtoolset-10-libasan-devel sudo patch
 
 # Install additional dependencies
