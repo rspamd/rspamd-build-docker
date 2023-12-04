@@ -1160,6 +1160,136 @@
 }
 ---
 {
+   "kind": "pipeline",
+   "name": "rbldnsd-amd64",
+   "platform": {
+      "arch": "amd64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "base_image",
+         "settings": {
+            "build_args": [
+               "DEBIAN_VERSION=bookworm"
+            ],
+            "dockerfile": "rbldnsd-build/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=rbldnsd-build/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/rbldnsd",
+            "tags": [
+               "build-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "kind": "pipeline",
+   "name": "rbldnsd-arm64",
+   "platform": {
+      "arch": "arm64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "base_image",
+         "settings": {
+            "build_args": [
+               "DEBIAN_VERSION=bookworm"
+            ],
+            "dockerfile": "rbldnsd-build/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=rbldnsd-build/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "rspamd/rbldnsd",
+            "tags": [
+               "build-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "depends_on": [
+      "rbldnsd-amd64",
+      "rbldnsd-arm64"
+   ],
+   "kind": "pipeline",
+   "name": "multiarch_rbldnsd",
+   "steps": [
+      {
+         "image": "plugins/manifest",
+         "name": "multiarch_rbldnsd",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "rspamd/rbldnsd:build",
+            "template": "rspamd/rbldnsd:build-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
    "depends_on": [
       "ci-images-amd64",
       "ci-images-arm64"
@@ -1491,7 +1621,7 @@
 }
 ---
 {
-   "hmac": "40c7aa8bac42ab4db64781e4c1eccb591fd26108756bd24ef552ee93e15e99d6",
+   "hmac": "4821c1bcdc1664a1cb551d6337ccdb16b4766bb11b8a6bbb3ee7c43317a8e192",
    "kind": "signature"
 }
 ...

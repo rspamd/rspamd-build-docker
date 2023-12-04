@@ -1,5 +1,6 @@
 local ci_image = 'rspamd/ci';
 local pkg_image = 'rspamd/pkg';
+local rbldnsd_image = 'rspamd/rbldnsd';
 
 local ALPINE_VERSION = '3.17.0';
 local FEDORA_VERSION = '38';
@@ -79,6 +80,29 @@ local build_base_image(arch) = {
         repo: ci_image,
         tags: [
           'ubuntu-gcc-' + arch,
+        ],
+      } + docker_defaults,
+    },
+  ],
+} + platform(arch) + trigger + pipeline_defaults;
+
+local build_rbldnsd_image(arch) = {
+  name: 'rbldnsd-' + arch,
+  steps: [
+    {
+      name: 'base_image',
+      image: 'plugins/docker',
+      settings: {
+        dockerfile: 'rbldnsd-build/Dockerfile',
+        label_schema: [
+          'docker.dockerfile=rbldnsd-build/Dockerfile',
+        ],
+        build_args: [
+          'DEBIAN_VERSION=bookworm',
+        ],
+        repo: rbldnsd_image,
+        tags: [
+          'build-' + arch,
         ],
       } + docker_defaults,
     },
@@ -265,6 +289,17 @@ local multiarch_step(step_name, image_name, image_tag) = {
   } + docker_defaults,
 };
 
+local multiarch_rbldnsd_image = {
+  name: 'multiarch_rbldnsd',
+  depends_on: [
+    'rbldnsd-amd64',
+    'rbldnsd-arm64',
+  ],
+  steps: [
+    multiarch_step('multiarch_rbldnsd', rbldnsd_image, 'build'),
+  ],
+} + trigger + pipeline_defaults;
+
 local multiarch_ci_images = {
   name: 'multiarch_ci_images',
   depends_on: [
@@ -340,6 +375,9 @@ local signature_placeholder = {
   build_pkg_image('ubuntu-focal', 'arm64'),
   build_pkg_image('ubuntu-jammy', 'amd64'),
   build_pkg_image('ubuntu-jammy', 'arm64'),
+  build_rbldnsd_image('amd64'),
+  build_rbldnsd_image('arm64'),
+  multiarch_rbldnsd_image,
   multiarch_ci_images,
   multiarch_pkg_images,
   tidyall_pipeline,
