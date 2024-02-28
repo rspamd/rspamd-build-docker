@@ -42,7 +42,7 @@ RUN set -x; \
 RUN set -x; \
 	yum -qy --setopt install_weak_deps=False upgrade-minimal && \
 	yum  -y --setopt install_weak_deps=False install \
-		dnf-plugins-core gdb llvm \
+		dnf-plugins-core gdb llvm libarchive \
 		file-libs glib2 libevent libicu libsodium luajit openssl-libs pcre sqlite-libs && \
 	yum -qy --setopt install_weak_deps=False debuginfo-install \
 		glibc glib2 libsodium luajit && \
