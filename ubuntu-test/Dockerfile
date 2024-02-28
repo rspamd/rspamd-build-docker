@@ -17,7 +17,7 @@ COPY --from=ubuntu-build-image /vectorscan /dump/vectorscan
 ARG c_compiler=gcc
 ARG cxx_compiler=g++
 # rspamd runtime dependencies (and also debug symbols to get more useful backtraces)
-ARG run_deps="libarchive libevent-2.1 libglib2.0-0 libglib2.0-dev libicu70 libluajit-5.1-2 libmagic1 libsqlite3-0 libssl3 libunwind8 libsodium23"
+ARG run_deps="libarchive13 libevent-2.1 libglib2.0-0 libglib2.0-dev libicu70 libluajit-5.1-2 libmagic1 libsqlite3-0 libssl3 libunwind8 libsodium23"
 # test dependencies:
 # * luarocks used to install luacov and luacov-coveralls
 # * python3-requests used by merge_coveralls.py
