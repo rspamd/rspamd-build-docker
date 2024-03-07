@@ -1,0 +1,71 @@
+name: Publish Docker image
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+
+jobs:
+  archspecific:
+    name: docker_build_archspecific
+    runs-on: ["self-hosted", "linux", "${{ matrix.arch }}"]
+    strategy:
+      matrix:
+        arch: [ARM64, X64]
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Create working directory
+        run: |
+          mkdir -p ${{ github.workspace }}/${{ github.job }}-${{ github.run_number }}
+
+      - name: Check out the repo
+        run: |
+          cd ${{ github.workspace }}/${{ github.job }}-${{ github.run_number }}
+          git clone ${{ github.server_url }}/${{ github.repository }} --branch ${{ github.ref_name }} --single-branch src
+
+      - name: Log in to the Container registry
+        run: |
+          docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+
+      - name: Build and push image
+        run: |
+          cd ${{ github.workspace }}/${{ github.job }}-${{ github.run_number }}/src/${{ inputs.name }}
+          docker build -t ghcr.io/${{ github.repository }}:${{ inputs.name }}-${{ matrix.arch }} .
+          docker push ghcr.io/${{ github.repository }}:${{ inputs.name }}-${{ matrix.arch }}
+
+      - name: Cleanup working directory
+        if: always()
+        run: |
+          rm -rf ${{ github.workspace }}/${{ github.job }}-${{ github.run_number }}
+
+  multiarch:
+    name: docker_multiarch
+    needs: [archspecific]
+    runs-on: ["self-hosted", "linux"]
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Log in to the Container registry
+        run: |
+          docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+
+      - name: Multiarchify
+        run: |
+          docker manifest create \
+          ghcr.io/${{ github.repository }}:${{ inputs.name }} \
+          ghcr.io/${{ github.repository }}:${{ inputs.name }}-ARM64 \
+          ghcr.io/${{ github.repository }}:${{ inputs.name }}-X64
+
+      - name: Push image
+        run: |
+          docker manifest push ghcr.io/${{ github.repository }}:${{ inputs.name }}
+
+      - name: Cleanup local manifest
+        if: always()
+        run: |
+          docker manifest rm ghcr.io/${{ github.repository }}:${{ inputs.name }}
