@@ -1,0 +1,20 @@
+name: ci
+
+on: [push, workflow_dispatch]
+
+jobs:
+  ubuntu_ci:
+    uses: ./.github/workflows/docker_build.yml
+    with:
+      name: "ubuntu-ci"
+    permissions:
+      packages: write
+      contents: read
+
+  fedora_ci:
+    uses: ./.github/workflows/docker_build.yml
+    with:
+      name: "fedora-ci"
+    permissions:
+      packages: write
+      contents: read
