@@ -6,66 +6,35 @@ on:
       name:
         required: true
         type: string
+      platforms:
+        default: linux/amd64,linux/arm64
+        type: string
 
 jobs:
-  archspecific:
-    name: docker_build_archspecific
-    runs-on: ["self-hosted", "linux", "${{ matrix.arch }}"]
-    strategy:
-      matrix:
-        arch: [ARM64, X64]
+  docker_build:
+    name: docker_build
+    runs-on: ["ubuntu-latest"]
     permissions:
       packages: write
       contents: read
     steps:
-      - name: Create working directory
-        run: |
-          mkdir -p ${{ github.workspace }}/${{ github.job }}-${{ github.run_number }}
+      - name: Check out source code
+        uses: actions/checkout@v4
 
-      - name: Check out the repo
-        run: |
-          cd ${{ github.workspace }}/${{ github.job }}-${{ github.run_number }}
-          git clone ${{ github.server_url }}/${{ github.repository }} --branch ${{ github.ref_name }} --single-branch src
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Log in to the Container registry
         run: |
           docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
 
-      - name: Build and push image
-        run: |
-          cd ${{ github.workspace }}/${{ github.job }}-${{ github.run_number }}/src/${{ inputs.name }}
-          docker build -t ghcr.io/${{ github.repository }}:${{ inputs.name }}-${{ matrix.arch }} .
-          docker push ghcr.io/${{ github.repository }}:${{ inputs.name }}-${{ matrix.arch }}
-
-      - name: Cleanup working directory
-        if: always()
-        run: |
-          rm -rf ${{ github.workspace }}/${{ github.job }}-${{ github.run_number }}
-
-  multiarch:
-    name: docker_multiarch
-    needs: [archspecific]
-    runs-on: ["self-hosted", "linux"]
-    permissions:
-      packages: write
-      contents: read
-    steps:
-      - name: Log in to the Container registry
-        run: |
-          docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
-
-      - name: Multiarchify
-        run: |
-          docker manifest create \
-          ghcr.io/${{ github.repository }}:${{ inputs.name }} \
-          ghcr.io/${{ github.repository }}:${{ inputs.name }}-ARM64 \
-          ghcr.io/${{ github.repository }}:${{ inputs.name }}-X64
-
-      - name: Push image
-        run: |
-          docker manifest push ghcr.io/${{ github.repository }}:${{ inputs.name }}
-
-      - name: Cleanup local manifest
-        if: always()
-        run: |
-          docker manifest rm ghcr.io/${{ github.repository }}:${{ inputs.name }}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ inputs.name }}
+          platforms: ${{ inputs.platforms }}
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ inputs.name }}
