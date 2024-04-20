@@ -93,3 +93,11 @@ jobs:
     permissions:
       packages: write
       contents: read
+
+  ubuntu_noble:
+    uses: ./.github/workflows/docker_build.yml
+    with:
+      name: "ubuntu-noble"
+    permissions:
+      packages: write
+      contents: read
