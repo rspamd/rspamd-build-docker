@@ -11,14 +11,8 @@ SHELL ["/bin/bash", "-c"]
 
 RUN set -x; \
 	apt-get -q update && \
-	apt-get -qy --no-install-recommends install $pre_deps && \
+	apt-get -qy --no-install-recommends install $pre_deps $compiler_deps $build_deps && \
 	apt-get -qy upgrade && \
-  echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-16 main" >> /etc/apt/sources.list && \
-  echo "deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-16 main" >> /etc/apt/sources.list && \
-  wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
-	apt-get -q update && \
-	apt-get -qy --no-install-recommends install $compiler_deps && \
-	apt-get -qy --no-install-recommends install $build_deps && \
 	rm -fr /luajit-src || true && \
 	rm -fr /luajit-build || true && \
 	git clone -b v2.1 https://luajit.org/git/luajit-2.0.git /luajit-src && \
