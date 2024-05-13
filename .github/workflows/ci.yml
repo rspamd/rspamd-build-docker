@@ -78,14 +78,6 @@ jobs:
       packages: write
       contents: read
 
-  ubuntu_focal:
-    uses: ./.github/workflows/docker_build.yml
-    with:
-      name: "ubuntu-focal"
-    permissions:
-      packages: write
-      contents: read
-
   ubuntu_jammy:
     uses: ./.github/workflows/docker_build.yml
     with:
