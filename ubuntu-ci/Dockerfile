@@ -2,7 +2,7 @@ ARG UBUNTU_VERSION=22.04
 
 FROM ubuntu:${UBUNTU_VERSION}
 
-ARG build_deps="binutils-dev cmake gcc g++ libarchive-dev libc6-dev libevent-dev libglib2.0-dev libicu-dev libluajit-5.1-dev libmagic-dev libsqlite3-dev libssl-dev libunwind-dev libsodium-dev make ninja-build pkg-config ragel"
+ARG build_deps="binutils-dev cmake gcc g++ libarchive-dev libc6-dev libevent-dev libfasttext-dev libglib2.0-dev libicu-dev libluajit-5.1-dev libmagic-dev libsqlite3-dev libssl-dev libunwind-dev libsodium-dev make ninja-build pkg-config ragel"
 ARG ci_deps="git sudo"
 ARG vectorscan_deps="cmake g++ git libboost-dev libsqlite3-dev pkg-config python3-dev ragel"
 ARG test_deps="clickhouse-server gdb miltertest opendkim-tools python3-tornado redis-server"
