@@ -10,6 +10,7 @@ ARG cxx_compiler="g++"
 SHELL ["/bin/bash", "-c"]
 
 RUN set -x; \
+	userdel ubuntu && \
 	apt-get -q update && \
 	apt-get -qy --no-install-recommends install $pre_deps $compiler_deps $build_deps && \
 	apt-get -qy upgrade && \
