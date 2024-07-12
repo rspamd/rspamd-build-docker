@@ -30,14 +30,6 @@ jobs:
       packages: write
       contents: read
 
-  centos_7:
-    uses: ./.github/workflows/docker_build.yml
-    with:
-      name: "centos-7"
-    permissions:
-      packages: write
-      contents: read
- 
   centos_8:
     uses: ./.github/workflows/docker_build.yml
     with:
