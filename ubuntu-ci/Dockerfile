@@ -6,7 +6,7 @@ ARG build_deps="binutils-dev cmake gcc g++ libarchive-dev libc6-dev libevent-dev
 ARG ci_deps="git sudo"
 ARG vectorscan_deps="cmake g++ git libboost-dev libsqlite3-dev pkg-config python3-dev ragel"
 ARG test_deps="clickhouse-server gdb miltertest opendkim-tools python3-tornado redis-server"
-ARG robot_test_deps="python3 python3-pip python3-setuptools python3-demjson python3-psutil python3-requests"
+ARG robot_test_deps="python3 python3-pip python3-setuptools python3-demjson python3-psutil python3-requests python3-pynacl"
 
 ARG c_compiler=gcc
 ARG cxx_compiler=g++
