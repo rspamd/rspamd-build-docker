@@ -50,7 +50,7 @@ RUN	dnf install -y \
 	rm /var/log/*.log && rm -r /var/cache/dnf
 
 RUN	dnf install -y \
-	python3 python3-pip python3-setuptools python3-demjson python3-psutil python3-requests python3-tornado \
+	python3 python3-pip python3-setuptools python3-demjson python3-psutil python3-requests python3-tornado python3-pynacl\
 	opendkim redis gdb && \
 	rm /var/log/*.log && rm -r /var/cache/dnf && \
 	pip3 install --no-cache --disable-pip-version-check --no-binary :all: robotframework
