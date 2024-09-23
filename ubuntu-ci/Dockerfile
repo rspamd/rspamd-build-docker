@@ -1,4 +1,4 @@
-ARG UBUNTU_VERSION=22.04
+ARG UBUNTU_VERSION=24.04
 
 FROM ubuntu:${UBUNTU_VERSION}
 
@@ -38,7 +38,7 @@ RUN     apt-get update && \
 	apt-get -qy --no-install-recommends install $build_deps $ci_deps $test_deps $robot_test_deps && \
 	apt-get -q clean && \
 	rm -rf /var/lib/apt/lists/* /var/log/apt/*.log && \
-	pip3 install --no-cache --disable-pip-version-check --no-binary :all: robotframework && \
+	pip3 install --break-system-packages --no-cache --disable-pip-version-check --no-binary :all: robotframework && \
 	useradd -G sudo -m build && \
 	passwd -d build
 
