@@ -16,7 +16,7 @@ RUN set -x; \
   rm -fr /luajit-src || true && \
 	rm -fr /luajit-build || true && \
 	git clone -b v2.1 https://luajit.org/git/luajit-2.0.git /luajit-src && \
-	pushd /luajit-src && make clean && make -j4 CC="$c_compiler -fPIC" PREFIX=/luajit-build && make install PREFIX=/luajit-build && popd && \
+	pushd /luajit-src && make clean && make -j4 CC="gcc -fPIC" PREFIX=/luajit-build && make install PREFIX=/luajit-build && popd && \
 	rm -f /luajit-build/lib/*.so || true && \
 	rm -fr /luajit-src || true && \
   rm -fr ragel-6.10 ; \
