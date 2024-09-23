@@ -13,6 +13,12 @@ RUN set -x; \
   	clang-devel llvm-devel libsodium-devel git rpm-build openblas-devel libunwind-devel lapack lapack-devel blas-devel blas pcre2-devel sudo gcc-toolset-10-gcc-c++ binutils systemd gcc-toolset-10-annobin gcc-toolset-10-binutils-devel gcc-toolset-10-libasan-devel patch && \
   wget https://www.colm.net/files/ragel/ragel-6.10.tar.gz && rm -fr ragel-6.10 && \
   tar xvf ragel-6.10.tar.gz && (cd ragel-6.10 && ./configure --prefix=/usr && make -j4 && make install) && \
+  rm -fr /luajit-src || true && \
+	rm -fr /luajit-build || true && \
+	git clone -b v2.1 https://luajit.org/git/luajit-2.0.git /luajit-src && \
+	pushd /luajit-src && make clean && make -j4 CC="$c_compiler -fPIC" PREFIX=/luajit-build && make install PREFIX=/luajit-build && popd && \
+	rm -f /luajit-build/lib/*.so || true && \
+	rm -fr /luajit-src || true && \
   rm -fr ragel-6.10 ; \
   rpmArch="$(rpm --eval '%{_arch}')" && \
   ln -sf /opt/rh/gcc-toolset-10/root/usr/lib/gcc/${rpmArch}-redhat-linux/10/plugin/annobin.so /opt/rh/gcc-toolset-10/root/usr/lib/gcc/${rpmArch}-redhat-linux/10/plugin/gcc-annobin.so && \
