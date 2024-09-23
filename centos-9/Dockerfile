@@ -13,6 +13,12 @@ RUN set -x; \
   #ln -sf /opt/rh/gcc-toolset-12/root/usr/lib/gcc/${rpmArch}-redhat-linux/12/plugin/annobin.so /opt/rh/gcc-toolset-12/root/usr/lib/gcc/${rpmArch}-redhat-linux/12/plugin/gcc-annobin.so && \
   tar xvf ragel-6.10.tar.gz && (cd ragel-6.10 && ./configure --prefix=/usr && make -j4 && make install) && \
   rm -fr ragel-6.10 ; \
+  rm -fr /luajit-src || true && \
+	rm -fr /luajit-build || true && \
+	git clone -b v2.1 https://luajit.org/git/luajit-2.0.git /luajit-src && \
+	pushd /luajit-src && make clean && make -j4 CC="$c_compiler -fPIC" PREFIX=/luajit-build && make install PREFIX=/luajit-build && popd && \
+	rm -f /luajit-build/lib/*.so || true && \
+	rm -fr /luajit-src || true && \
   rpmArch="$(rpm --eval '%{_arch}')" && \
   case "$rpmArch" in \
     aarch64) \
