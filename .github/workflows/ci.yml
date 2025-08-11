@@ -46,6 +46,14 @@ jobs:
       packages: write
       contents: read
 
+  centos_10:
+    uses: ./.github/workflows/docker_build.yml
+    with:
+      name: "centos-10"
+    permissions:
+      packages: write
+      contents: read
+
   debian_bullseye:
     uses: ./.github/workflows/docker_build.yml
     with:
