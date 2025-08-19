@@ -47,7 +47,7 @@ jobs:
       contents: read
 
   centos_10:
-    uses: ./.github/workflows/docker_build.yml
+    uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "centos-10"
     permissions:
