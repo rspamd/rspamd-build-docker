@@ -4,19 +4,17 @@ on: [push, workflow_dispatch]
 
 jobs:
   ubuntu_ci:
-    uses: ./.github/workflows/docker_build.yml
+    uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "ubuntu-ci"
-      platforms: linux/amd64
     permissions:
       packages: write
       contents: read
 
   fedora_ci:
-    uses: ./.github/workflows/docker_build.yml
+    uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "fedora-ci"
-      platforms: linux/amd64
     permissions:
       packages: write
       contents: read
@@ -25,13 +23,12 @@ jobs:
     uses: ./.github/workflows/docker_build.yml
     with:
       name: "perl-tidyall"
-      platforms: linux/amd64
     permissions:
       packages: write
       contents: read
 
   centos_8:
-    uses: ./.github/workflows/docker_build.yml
+    uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "centos-8"
     permissions:
@@ -39,7 +36,7 @@ jobs:
       contents: read
 
   centos_9:
-    uses: ./.github/workflows/docker_build.yml
+    uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "centos-9"
     permissions:
@@ -47,7 +44,7 @@ jobs:
       contents: read
 
   debian_bullseye:
-    uses: ./.github/workflows/docker_build.yml
+    uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "debian-bullseye"
     permissions:
@@ -55,7 +52,7 @@ jobs:
       contents: read
 
   debian_bookworm:
-    uses: ./.github/workflows/docker_build.yml
+    uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "debian-bookworm"
     permissions:
@@ -63,7 +60,7 @@ jobs:
       contents: read
 
   debian_trixie:
-    uses: ./.github/workflows/docker_build.yml
+    uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "debian-trixie"
     permissions:
@@ -71,7 +68,7 @@ jobs:
       contents: read
 
   rbldnsd_build:
-    uses: ./.github/workflows/docker_build.yml
+    uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "rbldnsd-build"
     permissions:
@@ -79,7 +76,7 @@ jobs:
       contents: read
 
   ubuntu_focal:
-    uses: ./.github/workflows/docker_build.yml
+    uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "ubuntu-focal"
     permissions:
@@ -87,7 +84,7 @@ jobs:
       contents: read
 
   ubuntu_jammy:
-    uses: ./.github/workflows/docker_build.yml
+    uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "ubuntu-jammy"
     permissions:
@@ -95,7 +92,7 @@ jobs:
       contents: read
 
   ubuntu_noble:
-    uses: ./.github/workflows/docker_build.yml
+    uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "ubuntu-noble"
     permissions:

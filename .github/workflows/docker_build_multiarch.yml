@@ -1,0 +1,59 @@
+name: Publish Docker image
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+
+jobs:
+  docker_build:
+    name: docker_build
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - label: amd64
+            runner: ubuntu-22.04
+          - label: arm64
+            runner: ubuntu-22.04-arm
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        run: |
+          docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ inputs.name }}
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ inputs.name }}-${{ matrix.label }}
+
+  docker_manifest:
+    name: docker_manifest
+    runs-on: ubuntu-22.04
+    needs: docker_build
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to the Container registry
+        run: |
+          docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+
+      - name: Create and push Docker manifest
+        run: |
+          docker buildx imagetools create \
+          -t ghcr.io/${{ github.repository }}:${{ inputs.name }} \
+          ghcr.io/${{ github.repository }}:${{ inputs.name }}-amd64 \
+          ghcr.io/${{ github.repository }}:${{ inputs.name }}-arm64
