@@ -1,0 +1,97 @@
+name: Try build Rspamd
+
+on:
+  workflow_call:
+
+env:
+  DISTRIBS_DEB: ubuntu-focal ubuntu-jammy ubuntu-noble debian-bullseye debian-bookworm
+  DISTRIBS_RPM: centos-8 centos-9 centos-10
+
+jobs:
+  test_build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: centos-8
+            arch: amd64
+          - image: centos-8
+            arch: arm64
+          - image: centos-9
+            arch: amd64
+          - image: centos-9
+            arch: arm64
+          - image: centos-10
+            arch: amd64
+          - image: centos-10
+            arch: arm64
+          - image: debian-bullseye
+            arch: amd64
+          - image: debian-bullseye
+            arch: arm64
+          - image: debian-bookworm
+            arch: amd64
+          - image: debian-bookworm
+            arch: arm64
+          - image: debian-trixie
+            arch: amd64
+          - image: debian-trixie
+            arch: arm64
+          - image: ubuntu-focal
+            arch: amd64
+          - image: ubuntu-focal
+            arch: arm64
+          - image: ubuntu-jammy
+            arch: amd64
+          - image: ubuntu-jammy
+            arch: arm64
+          - image: ubuntu-noble
+            arch: amd64
+          - image: ubuntu-noble
+            arch: arm64
+    runs-on: "${{ (inputs.platform == 'arm64') && 'ubuntu-22.04-arm' || 'ubuntu-22.04' }}"
+    steps:
+      - name: Check out rspamd
+        uses: actions/checkout@v4
+        with:
+          repository: rspamd/rspamd
+          path: rspamd
+
+      - name: Check out packpack
+        uses: actions/checkout@v4
+        with:
+          repository: packpack/packpack
+          path: packpack
+
+      - name: Log in to the Container registry
+        run: |
+          docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+
+      - name: Test build
+        run: |
+          export ASAN=0
+          export DEBIAN=0
+          export RPM=0
+          export LUAJIT=1
+          export PRESERVE_ENVVARS=LUAJIT,ASAN
+
+          for DIST in $DISTRIBS_DEB; do
+            if [[ "${{ matrix.image }}" == "$DIST" ]]; then
+              export DEBIAN=1
+            fi
+          done
+          for DIST in $DISTRIBS_RPM; do
+            if [[ "${{ matrix.image }}" == "$DIST" ]]; then
+              export RPM=1
+            fi
+          done
+
+          export DOCKER_IMAGE=${{ matrix.image }}
+          export DOCKER_REPO=ghcr.io/${{ github.repository }}
+
+          cd rspamd
+          ../packpack/packpack
+          if [ $RPM -eq 1 ]; then
+            export ASAN=1
+            ../packpack/packpack
+          fi
