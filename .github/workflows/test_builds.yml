@@ -49,7 +49,7 @@ jobs:
             arch: amd64
           - image: ubuntu-noble
             arch: arm64
-    runs-on: "${{ (inputs.platform == 'arm64') && 'ubuntu-22.04-arm' || 'ubuntu-22.04' }}"
+    runs-on: "${{ (matrix.arch == 'arm64') && 'ubuntu-22.04-arm' || 'ubuntu-22.04' }}"
     steps:
       - name: Check out rspamd
         uses: actions/checkout@v4
