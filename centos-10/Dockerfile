@@ -6,12 +6,11 @@ RUN set -x; \
   dnf config-manager --set-enabled ol10_codeready_builder && \
   dnf -qy install oracle-epel-release-el10 && \
   dnf -qy --setopt install_weak_deps=False upgrade-minimal && \
-  dnf copr enable luka222/rhel-epel-10-extra && \
   dnf  -y --setopt install_weak_deps=False install git clang compiler-rt gcc gcc-c++ lld cmake make pkgconf-pkg-config wget \
-  	libarchive-devel perl ragel file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel \
+  	libarchive-devel perl file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel \
   	clang-devel llvm-devel libsodium-devel rpm-build openblas-devel libunwind-devel lapack lapack-devel blas-devel blas pcre2-devel sudo binutils systemd patch \
         gcc-c++ binutils systemd binutils-devel gcc-plugin-annobin \
-        jemalloc-devel git python3-devel && \
+        git python3-devel && \
   wget https://www.colm.net/files/ragel/ragel-6.10.tar.gz && rm -fr ragel-6.10 && \
   tar xvf ragel-6.10.tar.gz && (cd ragel-6.10 && ./configure --prefix=/usr && make -j4 && make install) && \
   rm -fr ragel-6.10 ; \

@@ -2,6 +2,10 @@ name: ci
 
 on: [push, workflow_dispatch]
 
+concurrency:
+  group: rspamd-build-docker
+  cancel-in-progress: false
+
 jobs:
   ubuntu_ci:
     uses: ./.github/workflows/docker_build_multiarch.yml
