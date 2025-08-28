@@ -106,3 +106,7 @@ jobs:
     permissions:
       packages: write
       contents: read
+
+  test_builds:
+    needs: [centos_8, centos_9, centos_10, debian_bullseye, debian_bookworm, debian_trixie, ubuntu_focal, ubuntu_jammy, ubuntu_noble]
+    uses: ./.github/workflows/test_builds.yml
