@@ -1,0 +1,55 @@
+name: Try build Rspamd
+
+inputs:
+  image:
+    required: true
+    type: string
+  pkg_type:
+    required: true
+    type: string
+    options:
+      - deb
+      - rpm
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check out rspamd
+      uses: actions/checkout@v4
+      with:
+        repository: rspamd/rspamd
+        path: rspamd
+
+    - name: Check out packpack
+      uses: actions/checkout@v4
+      with:
+        repository: packpack/packpack
+        path: packpack
+
+    - name: Test build
+      shell: bash
+      run: |
+        export ASAN=0
+        export DEBIAN=0
+        export RPM=0
+        export LUAJIT=1
+        export PRESERVE_ENVVARS=LUAJIT,ASAN
+
+        if [[ "${{ inputs.pkg_type }}" == "deb" ]]; then
+          export DEBIAN=1
+        elif [[ "${{ inputs.pkg_type }}" == "rpm" ]]; then
+          export RPM=1
+        else
+          echo "Unknown package type: ${{ inputs.pkg_type }}"
+          exit 1
+        fi
+
+        export DOCKER_IMAGE=${{ inputs.image }}
+        export DOCKER_REPO=ghcr.io/${{ github.repository }}
+
+        cd rspamd
+        ../packpack/packpack
+        if [ $RPM -eq 1 ]; then
+          export ASAN=1
+          ../packpack/packpack
+        fi

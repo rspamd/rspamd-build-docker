@@ -6,6 +6,10 @@ on:
       name:
         required: true
         type: string
+      pkg_test:
+        required: false
+        type: string
+        default: "none"
 
 jobs:
   docker_build:
@@ -35,6 +39,13 @@ jobs:
           context: ${{ inputs.name }}
           push: true
           tags: ghcr.io/${{ github.repository }}:${{ inputs.name }}-${{ matrix.label }}
+
+      - if: ${{ inputs.pkg_test != 'none' }}
+        name: Test Docker image
+        uses: ./.github/actions/test_pkg
+        with:
+          image: ${{ inputs.name }}-${{ matrix.label }}
+          pkg_type: ${{ inputs.pkg_test }}
 
   docker_manifest:
     name: docker_manifest
