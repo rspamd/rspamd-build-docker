@@ -31,6 +31,7 @@ jobs:
     uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "centos-8"
+      pkg_test: rpm
     permissions:
       packages: write
       contents: read
@@ -39,6 +40,7 @@ jobs:
     uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "centos-9"
+      pkg_test: rpm
     permissions:
       packages: write
       contents: read
@@ -47,6 +49,7 @@ jobs:
     uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "centos-10"
+      pkg_test: rpm
     permissions:
       packages: write
       contents: read
@@ -55,6 +58,7 @@ jobs:
     uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "debian-bullseye"
+      pkg_test: deb
     permissions:
       packages: write
       contents: read
@@ -63,6 +67,7 @@ jobs:
     uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "debian-bookworm"
+      pkg_test: deb
     permissions:
       packages: write
       contents: read
@@ -71,6 +76,7 @@ jobs:
     uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "debian-trixie"
+      pkg_test: deb
     permissions:
       packages: write
       contents: read
@@ -87,6 +93,7 @@ jobs:
     uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "ubuntu-focal"
+      pkg_test: deb
     permissions:
       packages: write
       contents: read
@@ -95,6 +102,7 @@ jobs:
     uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "ubuntu-jammy"
+      pkg_test: deb
     permissions:
       packages: write
       contents: read
@@ -103,10 +111,7 @@ jobs:
     uses: ./.github/workflows/docker_build_multiarch.yml
     with:
       name: "ubuntu-noble"
+      pkg_test: deb
     permissions:
       packages: write
       contents: read
-
-  test_builds:
-    needs: [centos_8, centos_9, centos_10, debian_bullseye, debian_bookworm, debian_trixie, ubuntu_focal, ubuntu_jammy, ubuntu_noble]
-    uses: ./.github/workflows/test_builds.yml
