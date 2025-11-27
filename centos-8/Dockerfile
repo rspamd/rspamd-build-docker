@@ -1,12 +1,11 @@
-FROM oraclelinux:8-slim
+FROM almalinux:8
 
 # clang-plugin build dependencies:
 #  * clang-devel
 #  * llvm-devel
 RUN set -x; \
-  microdnf install dnf && \
   dnf -qy install epel-release && \
-  dnf config-manager --set-enabled ol8_codeready_builder && \
+  dnf config-manager --set-enabled powertools && \
   dnf -qy --setopt install_weak_deps=False upgrade-minimal && \
   dnf  -y --setopt install_weak_deps=False install clang compiler-rt gcc gcc-c++ lld cmake make pkgconf-pkg-config wget \
   	libarchive-devel perl ragel file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel \
@@ -31,7 +30,7 @@ RUN set -x; \
        rm -fr /vectorscan-src/ ; \
       ;; \
     *) \
-       dnf -qy install hyperscan-devel jemalloc-devel  ; \
+       dnf -qy install hyperscan-devel jemalloc  ; \
       ;; \
   esac && \
   rm /var/log/*.log && rm -r /var/cache/dnf 

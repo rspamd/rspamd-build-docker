@@ -1,9 +1,8 @@
-FROM oraclelinux:9-slim
+FROM almalinux:9
 
 RUN set -x; \
-  microdnf install dnf && \
   dnf -qy install epel-release && \
-  dnf config-manager --set-enabled ol9_codeready_builder && \
+  dnf config-manager --set-enabled crb && \
   dnf -qy --setopt install_weak_deps=False upgrade-minimal && \
   dnf  -y --setopt install_weak_deps=False install clang compiler-rt gcc gcc-c++ lld cmake make pkgconf-pkg-config wget \
   	libarchive-devel perl ragel file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel \
@@ -29,7 +28,7 @@ RUN set -x; \
        rm -fr /vectorscan-src/ ; \
       ;; \
     *) \
-       dnf -qy install hyperscan-devel jemalloc-devel git python3-devel \
+       dnf -qy install hyperscan-devel jemalloc git python3-devel \
       ;; \
   esac && \
   rm /var/log/*.log && rm -r /var/cache/dnf 
