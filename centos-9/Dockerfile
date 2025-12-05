@@ -7,7 +7,7 @@ RUN set -x; \
   dnf  -y --setopt install_weak_deps=False install clang compiler-rt gcc gcc-c++ lld cmake make pkgconf-pkg-config wget \
   	libarchive-devel perl ragel file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel \
   	clang-devel llvm-devel libsodium-devel git rpm-build openblas-devel libunwind-devel lapack lapack-devel blas-devel blas pcre2-devel sudo binutils systemd patch \
-    gcc-toolset-12-gcc-c++ binutils systemd gcc-toolset-12-binutils-devel gcc-toolset-12-libasan-devel gcc-toolset-12-gcc-plugin-annobin  && \
+    gcc-toolset-12-gcc-c++ binutils systemd gcc-toolset-12-binutils-devel gcc-toolset-12-libasan-devel gcc-toolset-12-gcc-plugin-annobin lua lua-devel && \
   wget https://www.colm.net/files/ragel/ragel-6.10.tar.gz && rm -fr ragel-6.10 && \
   #ln -sf /opt/rh/gcc-toolset-12/root/usr/lib/gcc/${rpmArch}-redhat-linux/12/plugin/annobin.so /opt/rh/gcc-toolset-12/root/usr/lib/gcc/${rpmArch}-redhat-linux/12/plugin/gcc-annobin.so && \
   tar xvf ragel-6.10.tar.gz && (cd ragel-6.10 && ./configure --prefix=/usr && make -j4 && make install) && \
@@ -31,7 +31,7 @@ RUN set -x; \
        dnf -qy install hyperscan-devel jemalloc git python3-devel \
       ;; \
   esac && \
-  rm /var/log/*.log && rm -r /var/cache/dnf 
+  dnf clean all && rm -f /var/log/*.log 
 
 # Install fasttext
 RUN    ( rm -fr /fasttext-src/ || true ) && git clone https://github.com/rspamd/fastText.git --depth 1 /fasttext-src && \

@@ -9,7 +9,7 @@ RUN set -x; \
   	libarchive-devel perl file-devel glib2-devel libicu-devel openssl-devel sqlite-devel zlib-devel \
   	clang-devel llvm-devel libsodium-devel rpm-build openblas-devel libunwind-devel lapack lapack-devel blas-devel blas pcre2-devel sudo binutils systemd patch \
         gcc-c++ binutils systemd binutils-devel gcc-plugin-annobin libasan gcc-toolset-15 gcc-toolset-15-libasan-devel gcc-toolset-15-gcc-plugin-annobin \
-        python3-devel && \
+        python3-devel lua lua-devel && \
   wget https://www.colm.net/files/ragel/ragel-6.10.tar.gz && rm -fr ragel-6.10 && \
   tar xvf ragel-6.10.tar.gz && (cd ragel-6.10 && ./configure --prefix=/usr && make -j4 && make install) && \
   rm -fr ragel-6.10 ; \
@@ -29,7 +29,7 @@ RUN set -x; \
        rm -fr /vectorscan-src/ ; \
       ;; \
   esac && \
-  rm /var/log/*.log && rm -r /var/cache/dnf 
+  dnf clean all && rm -f /var/log/*.log 
 
 # Install fasttext
 RUN    ( rm -fr /fasttext-src/ || true ) && git clone https://github.com/rspamd/fastText.git --depth 1 /fasttext-src && \
