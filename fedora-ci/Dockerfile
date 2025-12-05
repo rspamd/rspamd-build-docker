@@ -1,4 +1,4 @@
-ARG  FEDORA_VERSION=39
+ARG  FEDORA_VERSION=43
 
 FROM fedora:${FEDORA_VERSION}
 
@@ -11,7 +11,7 @@ ENV cxx_compiler=$cxx_compiler
 #  * clang-devel
 #  * llvm-devel
 RUN	dnf install -y clang compiler-rt lld cmake make pkgconf-pkg-config \
-	perl ragel file-devel glib2-devel libarchive-devel libevent-devel libicu-devel luajit-devel openssl-devel sqlite-devel zlib-devel \
+	perl ragel file-devel glib2-devel libarchive-devel libevent-devel libicu-devel lua-devel openssl-devel sqlite-devel zlib-devel \
 	clang-devel llvm-devel libsodium-devel ninja-build git && \
 	rm /var/log/*.log && rm -r /var/cache/dnf
 
@@ -44,9 +44,9 @@ RUN	set -x; \
 
 RUN	dnf install -y \
 		gdb llvm \
-		file-libs glib2 libevent libicu libsodium luajit openssl-libs pcre sqlite-libs && \
+		file-libs glib2 libevent libicu libsodium lua openssl-libs pcre sqlite-libs && \
 	dnf debuginfo-install -y \
-		glibc glib2 libsodium luajit && \
+		glibc glib2 libsodium lua && \
 	rm /var/log/*.log && rm -r /var/cache/dnf
 
 RUN	dnf install -y \
