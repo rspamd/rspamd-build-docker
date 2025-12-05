@@ -33,7 +33,7 @@ RUN set -x; \
        dnf -qy install hyperscan-devel jemalloc  ; \
       ;; \
   esac && \
-  rm /var/log/*.log && rm -r /var/cache/dnf 
+  dnf clean all && rm -f /var/log/*.log 
 
 # Install fasttext
 RUN    ( rm -fr /fasttext-src/ /fasttext || true ) && git clone https://github.com/rspamd/fastText.git --depth 1 /fasttext-src && \

@@ -29,7 +29,7 @@ RUN set -x; \
        rm -fr /vectorscan-src/ ; \
       ;; \
   esac && \
-  rm /var/log/*.log && rm -r /var/cache/dnf 
+  dnf clean all && rm -f /var/log/*.log 
 
 # Install fasttext
 RUN    ( rm -fr /fasttext-src/ || true ) && git clone https://github.com/rspamd/fastText.git --depth 1 /fasttext-src && \

@@ -13,7 +13,7 @@ ENV cxx_compiler=$cxx_compiler
 RUN	dnf install -y clang compiler-rt lld cmake make pkgconf-pkg-config \
 	perl ragel file-devel glib2-devel libarchive-devel libevent-devel libicu-devel lua-devel openssl-devel sqlite-devel zlib-devel \
 	clang-devel llvm-devel libsodium-devel ninja-build git && \
-	rm /var/log/*.log && rm -r /var/cache/dnf
+	dnf clean all && rm -f /var/log/*.log
 
 RUN	set -x; \
 	sysArch="$(uname -m)" && \
@@ -47,12 +47,12 @@ RUN	dnf install -y \
 		file-libs glib2 libevent libicu libsodium lua openssl-libs pcre sqlite-libs && \
 	dnf debuginfo-install -y \
 		glibc glib2 libsodium lua && \
-	rm /var/log/*.log && rm -r /var/cache/dnf
+	dnf clean all && rm -f /var/log/*.log
 
 RUN	dnf install -y \
 	python3 python3-pip python3-setuptools python3-demjson python3-psutil python3-requests python3-tornado python3-pynacl\
 	opendkim redis gdb && \
-	rm /var/log/*.log && rm -r /var/cache/dnf && \
+	dnf clean all && rm -f /var/log/*.log && \
 	pip3 install --no-cache --disable-pip-version-check --no-binary :all: robotframework
 
 RUN	useradd -G wheel -m build -p ''
