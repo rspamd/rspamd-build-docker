@@ -11,7 +11,7 @@ ENV cxx_compiler=$cxx_compiler
 #  * clang-devel
 #  * llvm-devel
 RUN	dnf install -y clang compiler-rt lld cmake make pkgconf-pkg-config \
-	perl ragel file-devel glib2-devel libarchive-devel libevent-devel libicu-devel lua-devel openssl-devel sqlite-devel zlib-devel \
+	perl ragel file-devel glib2-devel libarchive-devel libevent-devel libicu-devel lua-devel openssl openssl-devel sqlite-devel zlib-devel \
 	clang-devel llvm-devel libsodium-devel ninja-build git && \
 	dnf clean all && rm -f /var/log/*.log
 
