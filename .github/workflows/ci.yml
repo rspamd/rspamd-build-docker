@@ -93,15 +93,6 @@ jobs:
       packages: write
       contents: read
 
-  ubuntu_focal:
-    uses: ./.github/workflows/docker_build_multiarch.yml
-    with:
-      name: "ubuntu-focal"
-      pkg_test: deb
-    permissions:
-      packages: write
-      contents: read
-
   ubuntu_jammy:
     uses: ./.github/workflows/docker_build_multiarch.yml
     with:
