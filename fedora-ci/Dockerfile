@@ -51,6 +51,7 @@ RUN	dnf install -y \
 
 RUN	dnf install -y \
 	python3 python3-pip python3-setuptools python3-demjson python3-psutil python3-requests python3-tornado python3-pynacl\
+	python3-msgpack python3-redis \
 	opendkim redis gdb && \
 	dnf clean all && rm -f /var/log/*.log && \
 	pip3 install --no-cache --disable-pip-version-check --no-binary :all: robotframework
