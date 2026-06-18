@@ -4,15 +4,27 @@ FROM ubuntu:${UBUNTU_VERSION}
 ENV DEBIAN_FRONTEND noninteractive
 ARG build_deps="binutils-dev cmake make pkg-config ragel libarchive-dev libc6-dev libevent-dev libglib2.0-dev libicu-dev git rsync wget libmagic-dev libsqlite3-dev libssl-dev libunwind-dev libsodium-dev ninja-build fakeroot make ca-certificates less devscripts debhelper dpkg-dev libcurl4-openssl-dev build-essential libopenblas-dev git libpcre2-dev liblua5.3-dev"
 ARG pre_deps="equivs gnupg2 wget git ca-certificates apt-utils sudo patch"
-ARG compiler_deps="gcc g++ make libunwind-dev"
-ARG c_compiler="gcc"
-ARG cxx_compiler="g++"
+# Focal's default toolchain is GCC 9, which lacks C++20 library features
+# rspamd now relies on (e.g. <span>). gcc-10/g++-10 ship in focal's own
+# universe and link against focal's glibc, so the produced binaries stay
+# 20.04-compatible while gaining the C++20 floor the rest of the matrix
+# already uses.
+ARG compiler_deps="gcc-10 g++-10 make libunwind-dev"
+ARG c_compiler="gcc-10"
+ARG cxx_compiler="g++-10"
+# Make cmake/make pick gcc-10 even though the rspamd build invokes cmake
+# without -DCMAKE_C_COMPILER on focal.
+ENV CC=gcc-10 CXX=g++-10
 SHELL ["/bin/bash", "-c"]
 
 RUN set -x; \
 	apt-get -q update && \
 	apt-get -qy --no-install-recommends install $pre_deps $compiler_deps $build_deps && \
 	apt-get -qy upgrade && \
+	update-alternatives --install /usr/bin/cc  cc  /usr/bin/gcc-10 100 && \
+	update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++-10 100 && \
+	update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-10 100 && \
+	update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100 && \
 	rm -fr /luajit-src || true && \
 	rm -fr /luajit-build || true && \
 	git clone -b v2.1 https://luajit.org/git/luajit-2.0.git /luajit-src && \
