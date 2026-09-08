@@ -58,15 +58,6 @@ jobs:
       packages: write
       contents: read
 
-  debian_bullseye:
-    uses: ./.github/workflows/docker_build_multiarch.yml
-    with:
-      name: "debian-bullseye"
-      pkg_test: deb
-    permissions:
-      packages: write
-      contents: read
-
   debian_bookworm:
     uses: ./.github/workflows/docker_build_multiarch.yml
     with:
