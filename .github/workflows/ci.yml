@@ -110,3 +110,12 @@ jobs:
     permissions:
       packages: write
       contents: read
+
+  ubuntu_resolute:
+    uses: ./.github/workflows/docker_build_multiarch.yml
+    with:
+      name: "ubuntu-resolute"
+      pkg_test: deb
+    permissions:
+      packages: write
+      contents: read
